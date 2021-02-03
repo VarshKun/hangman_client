@@ -404,18 +404,20 @@ class _CreateRoom extends State<CreateRoom> {
                                                           ),
                                                         ),
                                                         Expanded(
-                                                          flex: 23,
-                                                           child: Text(
-                                                            'VISIBLE ROOM',
-                                                            style: TextStyle(
-                                                              color: Colors.blueGrey,
-                                                              fontFamily: 'NunitoBold'
-                                                            ),
+                                                          flex: 10,
+                                                           child: Center(
+                                                             child: Text(
+                                                              'VISIBLE ROOM',
+                                                              style: TextStyle(
+                                                                color: Colors.blueGrey,
+                                                                fontFamily: 'NunitoBold'
+                                                              ),
                                                           ),
+                                                           ),
                                                         ),
                                                         Expanded(
                                                           child: Container(
-                                                            
+                                                           
                                                           ),
                                                         ),
                                                       ],
@@ -442,19 +444,19 @@ class _CreateRoom extends State<CreateRoom> {
                                                     child: Row(
                                                       children: [
                                                         Expanded(
-                                                          flex: 8,
+                                                          flex: 1,
                                                           child: Container(
                                                             
                                                           ),
                                                         ),
                                                         Expanded(
-                                                          flex:16,
+                                                          flex:1,
                                                           child: AdvancedSwitch(
                                                             activeColor: Colors.blue,
                                                             activeChild: Text('ON'),
                                                             inactiveChild: Text('OFF'),
                                                             borderRadius: BorderRadius.circular(5),
-                                                            width: 55,
+                                                            width: 58,
                                                             value: _value01,
                                                             onChanged: (value) => setState(() {
                                                               _value01 = value;
@@ -462,9 +464,9 @@ class _CreateRoom extends State<CreateRoom> {
                                                           ),
                                                         ),
                                                         Expanded(
-                                                          flex: 8,
+                                                          flex: 1,
                                                           child: Container(
-                                                           
+                                                            
                                                           ),
                                                         ),
                                                       ],
