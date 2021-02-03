@@ -1,4 +1,3 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:hangman_multiplayer/category.dart';
@@ -35,33 +34,10 @@ class _CreateRoom extends State<CreateRoom> {
                         child: Column(
                           children: [
                             Expanded(
-                              flex: 3,
+                              flex: 1,
                               child: Container
                               (
-                                color: Colors.blue,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 4,
-                              child: Container(
-                                color: Colors.blue,
-                                width: 300,
-                                child: ColorizeAnimatedTextKit(
-                                  repeatForever: true,
-                                  speed: Duration(microseconds: 300000),
-                                  pause: Duration(microseconds: 0),
-                                  text: ["Hangman"],
-                                  textStyle: TextStyle(
-                                    fontSize: 57.0,
-                                    fontFamily: 'ComfortaaBold',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  colors: [
-                                    Colors.lightBlueAccent[100],
-                                    Colors.yellow,
-                                    Colors.yellow[700]
-                                  ],
-                                ),
+                                
                               ),
                             ),
                             Expanded(
@@ -70,9 +46,10 @@ class _CreateRoom extends State<CreateRoom> {
                               (
                                 children: [
                                   Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                     
+                                    flex: 1,
+                                    child: Container
+                                    (
+                                    
                                     ),
                                   ),
                                   Expanded(
@@ -84,7 +61,7 @@ class _CreateRoom extends State<CreateRoom> {
                                         'SETUP',
                                         style: TextStyle(
                                           fontFamily: 'NunitoBold',
-                                          fontSize: 20,
+                                          fontSize: 40,
                                           color: Colors.yellow[700],
                                           shadows: <Shadow>[
                                            Shadow(
@@ -99,58 +76,26 @@ class _CreateRoom extends State<CreateRoom> {
                                     ),
                                   ),
                                   Expanded(
-                                    child: Container(
+                                    flex: 1,
+                                    child: Container
+                                    (
                                       
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Expanded
-                            (
-                              flex: 3,
-                              child: Container(
-                                
-                              ),
-                            ),
-                            Expanded
-                            (
-                              flex: 2,
-                              child: IconButton(
-                                icon: Icon(Icons.login_rounded),
-                                onPressed: (){},
-                                color: Colors.white,
-                                iconSize: 30
-                              ),
-                            ),
-                            Expanded
-                            (
+                            Expanded(
                               flex: 1,
-                              child: Text(
-                                'Login',
-                                style: TextStyle(
-                                  fontFamily: 'PumpkinCheesecake',
-                                  fontSize: 24,
-                                  color: Colors.white
-                                ),
-                              ),
-                            ),
-                            Expanded
-                            (
-                              flex: 2,
-                              child: Container(
+                              child: Container
+                              (
                                 
                               ),
                             ),
                           ],
                         ),
                       ),
+                      
                     ],
                   ),
                 ),
@@ -388,70 +333,17 @@ class _CreateRoom extends State<CreateRoom> {
                                           children: [
                                             Expanded(
                                               flex: 2,
-                                              child: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Container(
-                                                      
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Container(
-                                                            
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 10,
-                                                           child: Center(
-                                                             child: Text(
-                                                              'VISIBLE ROOM',
-                                                              style: TextStyle(
-                                                                color: Colors.blueGrey,
-                                                                fontFamily: 'NunitoBold'
-                                                              ),
-                                                          ),
-                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Container(
-                                                           
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Container(  
-                                                      
-                                                    ),
-                                                  ),
-                                                ],
+                                              child: Text(
+                                                'VISIBLE ROOM',
+                                                style: TextStyle(
+                                                  color: Colors.blueGrey,
+                                                  fontFamily: 'NunitoBold'
+                                                ),
                                               ),
                                             ),
                                             Expanded(
-                                              flex: 3,
-                                              child: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Container(
-                                                      
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Container(
-                                                            
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex:1,
-                                                          child: AdvancedSwitch(
+                                              flex: 2,
+                                              child: AdvancedSwitch(
                                                             activeColor: Colors.blue,
                                                             activeChild: Text('ON'),
                                                             inactiveChild: Text('OFF'),
@@ -462,23 +354,6 @@ class _CreateRoom extends State<CreateRoom> {
                                                               _value01 = value;
                                                             }),
                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Container(
-                                                            
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Container(
-                                                      
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
                                             ),
                                           ],
                                         ),
