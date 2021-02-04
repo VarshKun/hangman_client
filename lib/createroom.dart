@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:hangman_multiplayer/category.dart';
@@ -8,9 +10,7 @@ import 'package:hangman_multiplayer/menupage.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 import 'game.dart';
-
-
-
+import 'hangman_client.dart';
 
 class CreateRoom extends StatefulWidget {
   @override
@@ -22,19 +22,35 @@ class _CreateRoom extends State<CreateRoom> {
   String dropdownValue2 = '70';
   bool _value01 = false;
   bool _isLoading = false;
+  String dataRecv = "";
   
-  Future showOverlay() {
+  Future<String> showOverlay() {
     setState(() {
       _isLoading = true;
     });
 
-    return Future.delayed(Duration(seconds: 3), () {
-      setState(() {
+    tcpSend(dataHandler, errorHandler, "newmatch/0/8/200");
+    
+    return Future.delayed(
+      Duration(seconds: 2),
+      () => dataRecv,
+    );
+  }
+
+  void dataHandler(data){
+    dataRecv = new String.fromCharCodes(data).trim();
+    setState(() {
         _isLoading = false;
       });
-    });
   }
-  
+
+  void errorHandler(Object error, StackTrace trace){
+    setState(() {
+        _isLoading = false;
+      });
+    print(error);
+  }
+    
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -573,10 +589,8 @@ class _CreateRoom extends State<CreateRoom> {
                                                             showDialog(
                                                                 context: context,
                                                                 builder: (BuildContext context){
-                                                                  return CustomDialog();
-                                                                  
-                                                                } 
-                                                                
+                                                                  return CustomDialog(value);                                                                  
+                                                                }                                                                 
                                                             ),
                                                           } 
                                                         );                                                    

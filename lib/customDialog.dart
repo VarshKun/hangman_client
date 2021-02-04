@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/services.dart';
+import 'dart:convert';
 
-
-var matchId = '12345678';
-var txt = TextEditingController(text: matchId,);
+// var txt = TextEditingController(text: matchId,);
 bool _hasBeenPressed = false;
+String matchId = "";
 
 class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
 }
 class _CustomDialog extends State<CustomDialog>{
+  
   dialogContent(BuildContext context){
     return Container(
       
@@ -72,7 +73,7 @@ class _CustomDialog extends State<CustomDialog>{
               fontWeight: FontWeight.bold
             ),
             textAlign: TextAlign.center,
-            controller: txt,
+            controller: TextEditingController(text: matchId),
             focusNode: AlwaysDisabledFocusNode(),
           ),
           SizedBox(height: 24.0),
@@ -135,8 +136,20 @@ class _CustomDialog extends State<CustomDialog>{
   }
 }
 class CustomDialog extends StatefulWidget {
+
   @override
   _CustomDialog createState() => _CustomDialog();
+
+  CustomDialog(String _matchId){
+    try {
+      final parsed = json.decode(_matchId); 
+      matchId = parsed['matchId'];
+    } on FormatException catch (e) {
+      print("That string didn't look like Json." + e.message);
+    } on NoSuchMethodError catch (e) {
+      print('That string was null!' + e.stackTrace.toString());
+    }    
+  }  
   
 }
 
