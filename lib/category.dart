@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 
-class Category extends StatefulWidget {
+class Category extends StatefulWidget { 
+
+  final ValueChanged<int> onSelectedIndexChanged;
+
+  Category({Key key, this.onSelectedIndexChanged}) : super(key: key);
+
   @override
   _Category createState() => _Category();
 }
 
 class _Category extends State<Category> {
+
+  int selectedIndex = 0;
+
   Set<String> categoryPaths = {
     'assets/avatars/general.png',
     'assets/avatars/animal.png',
@@ -24,8 +32,6 @@ class _Category extends State<Category> {
     'Objects',
     'Pokemon'
   };
-
-  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,8 @@ class _Category extends State<Category> {
                         onTap: () {
                           setState(() 
                           {
-                            selectedIndex = index;               
+                            selectedIndex = index;    
+                            widget.onSelectedIndexChanged(index);           
                           });                          
                         },
                         splashColor: Colors.yellow[700],

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:hangman_multiplayer/category.dart';
@@ -11,6 +9,8 @@ import 'package:loading_overlay/loading_overlay.dart';
 
 import 'game.dart';
 import 'hangman_client.dart';
+
+int _category = 0;
 
 class CreateRoom extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class _CreateRoom extends State<CreateRoom> {
       _isLoading = true;
     });
 
-    tcpSend(dataHandler, errorHandler, "newmatch/0/8/200");
+    tcpSend(dataHandler, errorHandler, "newmatch/$_category/8/200");
     
     return Future.delayed(
       Duration(seconds: 2),
@@ -546,7 +546,11 @@ class _CreateRoom extends State<CreateRoom> {
                                     ),
                                     Expanded(
                                       flex: 5,
-                                      child: Category()
+                                      child: Category(
+                                        onSelectedIndexChanged: (newCategory){
+                                          _category = newCategory;
+                                        },
+                                      )
                                     ),
                                     Expanded(
                                       flex: 2,
