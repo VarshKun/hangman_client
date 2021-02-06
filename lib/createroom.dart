@@ -13,6 +13,7 @@ import 'hangman_client.dart';
 int _category = 0;
 
 class CreateRoom extends StatefulWidget {
+  
   @override
   _CreateRoom createState() => _CreateRoom();
 }
@@ -29,7 +30,7 @@ class _CreateRoom extends State<CreateRoom> {
       _isLoading = true;
     });
 
-    tcpSend(dataHandler, errorHandler, "newmatch/$_category/8/200");
+    tcpSend(dataHandler, errorHandler, "newmatch/$_category/$dropdownValue1/$dropdownValue2");
     
     return Future.delayed(
       Duration(seconds: 2),
@@ -260,6 +261,7 @@ class _CreateRoom extends State<CreateRoom> {
                                                         child: ButtonTheme(
                                                           alignedDropdown: true,
                                                           child: DropdownButton<String>(
+                                                            
                                                             isExpanded: true,
                                                             value: dropdownValue1,
                                                             iconSize: 24,
@@ -272,6 +274,7 @@ class _CreateRoom extends State<CreateRoom> {
                                                             onChanged: (String newValue) {
                                                               setState(() {
                                                                 dropdownValue1 = newValue;
+                                                                
                                                               });
                                                             },
                                                             items: <String>[

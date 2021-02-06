@@ -21,6 +21,7 @@ class _ImageAvatar extends State<HomeScreen> {
     'assets/avatars/avatar8.png',
     'assets/avatars/avatar9.png',
     'assets/avatars/avatar10.png',
+    
   };
   var currentIndex = 0;
 
@@ -271,6 +272,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide:
                                                     BorderSide(color: Colors.black, width: 1),
+                                                borderRadius: BorderRadius.circular(10),s
                                               ),
                                               hintText: "Nickname",
                                             ),
