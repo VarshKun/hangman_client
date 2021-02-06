@@ -272,7 +272,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide:
                                                     BorderSide(color: Colors.black, width: 1),
-                                                borderRadius: BorderRadius.circular(10),s
+                                                borderRadius: BorderRadius.circular(10),
                                               ),
                                               hintText: "Nickname",
                                             ),
