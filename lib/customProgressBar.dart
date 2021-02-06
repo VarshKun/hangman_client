@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'dart:async';
+
 
 class CustomProgressBar extends StatelessWidget{
   final double width;
-  final double value;
-  final double totalValue;
+  final int value;
+  final int totalValue;
   CustomProgressBar(this.width,this.value,this.totalValue);
 
   @override
@@ -31,7 +30,7 @@ class CustomProgressBar extends StatelessWidget{
                 height: 10,
                 duration: Duration(milliseconds: 500),
                 decoration: BoxDecoration(
-                  color: (ratio < 0.3)? Colors.red :(ratio < 0.6) ? Colors.yellow[700] :Colors.yellow[800],
+                  color: (ratio < 0.3)? Colors.red : (ratio < 0.6) ? Colors.yellow[700] :Colors.yellow[800],
                   borderRadius: BorderRadius.circular(8)
                 ),
               ),
@@ -44,10 +43,10 @@ class CustomProgressBar extends StatelessWidget{
   }
 }
 
-class TimeState with ChangeNotifier{
-  int _time = 15;
-  int get time => _time;
-  set time (int newTime){
-    _time = newTime; notifyListeners();
-  }
-}
+// class TimeState with ChangeNotifier{
+//   int _time = 15;
+//   int get time => _time;
+//   set time (int newTime){
+//     _time = newTime; notifyListeners();
+//   }
+// }
