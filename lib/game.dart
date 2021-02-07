@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'dart:async';
 
 import 'exitDialog.dart';
+import 'informationDialog.dart';
 
 bool _waiting = true;
 
@@ -353,7 +354,14 @@ class _Game extends State<Game> {
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(16)),
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context){
+                                                      return InformationDialog();                                                                  
+                                                    }                                                                 
+                                                );
+                                              },
                                               child: Icon(
                                                 Icons.info_outline_rounded,
                                                 size: 30,

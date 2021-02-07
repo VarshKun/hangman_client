@@ -1,5 +1,6 @@
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
-
+import 'package:hangman_multiplayer/createroom.dart';
 import 'package:lottie/lottie.dart';
 
 class _InformationDialog extends State<InformationDialog>{
@@ -34,34 +35,91 @@ class _InformationDialog extends State<InformationDialog>{
               },
             ),
           ),
-          Text(
-            'Exit game?',
-            style: TextStyle(
-              fontSize: 24.0,
-              fontFamily: 'NunitoBold'
+          BorderedText(
+            strokeWidth: 3,
+            strokeColor: Colors.grey[900],
+            child: Text(
+              'INFO',
+              style: TextStyle(
+                fontFamily: 'NunitoBold',
+                fontSize: 20,
+                color: Colors.yellow[700],
+                shadows: <Shadow>[
+                  Shadow(
+                    color: Colors.black,
+                    offset: Offset(3,2),
+                    blurRadius: 3
+                  )
+                ]
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
           
           Lottie.asset(
-            'assets/animations/log_out.json',
-            width: 150,
-            height: 150
+            'assets/animations/setting.json',
+            width: 200,
+            height: 200
           ),
-          SizedBox(height: 10.0),
-          Text(
-            "Are you sure you want to exit the game?",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18.0,
-              fontFamily: 'NunitoBold',
-            ),
-          ),
-          SizedBox(height: 16.0),
-          
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "THEME:",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'NunitoBold',
+                    fontSize: 16,
+                    color: Colors.blue
+                  ),
+                )
+                
+                
+              ),
               
-       
-           
-          SizedBox(height: 24),
+              Expanded(
+                child: Text(
+                  "GOAL:",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'NunitoBold',
+                    fontSize: 16,
+                    color: Colors.blue
+                  ),
+                )
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "General",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'NunitoBold',
+                    fontSize: 15,
+                    color: Colors.black54
+                  ),
+                )
+                
+                
+              ),
+              
+              Expanded(
+                child: Text(
+                  "150 points",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'NunitoBold',
+                    fontSize:15,
+                    color: Colors.black54
+                  ),
+                )
+              ),
+            ],
+          ),
+          SizedBox(height: 30,)
         ],
       ),
     );

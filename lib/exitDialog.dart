@@ -1,3 +1,4 @@
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hangman_multiplayer/menupage.dart';
 import 'package:lottie/lottie.dart';
@@ -34,11 +35,24 @@ class _ExitDialog extends State<ExitDialog>{
               },
             ),
           ),
-          Text(
-            'Exit game?',
-            style: TextStyle(
-              fontSize: 24.0,
-              fontFamily: 'NunitoBold'
+          BorderedText(
+            strokeWidth: 3,
+            strokeColor: Colors.grey[900],
+            child: Text(
+              'EXIT GAME?',
+              style: TextStyle(
+                fontFamily: 'NunitoBold',
+                fontSize: 20,
+                color: Colors.yellow[700],
+                shadows: <Shadow>[
+                  Shadow(
+                    color: Colors.black,
+                    offset: Offset(3,2),
+                    blurRadius: 3
+                  )
+                ]
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
           
