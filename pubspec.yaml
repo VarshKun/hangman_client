@@ -94,6 +94,8 @@ flutter:
    - assets/avatars/objects.png
    - assets/avatars/pokemon.png
    - assets/animations/paper_plane.json
+   - assets/animations/waiting_pigeon.json
+   - assets/animations/log_out.json
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

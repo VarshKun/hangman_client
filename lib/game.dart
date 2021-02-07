@@ -1,9 +1,14 @@
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
+import 'package:hangman_multiplayer/chatbox.dart';
 import 'package:hangman_multiplayer/customProgressBar.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 
-//bool _hasBeenPressed = false;
+import 'exitDialog.dart';
+
+bool _waiting = true;
 
 class Game extends StatefulWidget {
   @override
@@ -11,6 +16,7 @@ class Game extends StatefulWidget {
 }
 
 class _Game extends State<Game> {
+  var _firstPress = true ;  
   @override
   Widget build(BuildContext context) {
     //return WillPopScope(
@@ -18,13 +24,83 @@ class _Game extends State<Game> {
     return ChangeNotifierProvider(
       create: (context) => TimeState(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.blue,
         body: Column(
           children: [
             Expanded(
               flex: 9,
               child: Container(
-                color: Colors.white,
+                color:Colors.white,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex:2,
+                            child:Container(
+                              
+                            )
+                          ),
+                          Expanded(
+                            child: BorderedText(
+                              strokeWidth: 3,
+                              strokeColor: Colors.grey[900],
+                              child: Text(
+                                'WAITING',
+                                style: TextStyle(
+                                  fontFamily: 'NunitoBold',
+                                  fontSize: 20,
+                                  color: Colors.yellow[700],
+                                  shadows: <Shadow>[
+                                    Shadow(
+                                      color: Colors.black,
+                                      offset: Offset(3,2),
+                                      blurRadius: 3
+                                    )
+                                  ]
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Lottie.asset(
+                        'assets/animations/waiting_pigeon.json',
+                        width: 400,
+                        height: 200
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child:Text(
+                              'WAITING FOR PLAYERS',
+                              style: TextStyle(
+                                fontFamily: 'NunitoBold',
+                                fontSize:14,
+                                color: Colors.blueGrey[600]
+                              ),
+                            )
+                          ),
+                          Expanded(
+                            flex:2,
+                            child:Container(
+                              
+                            )
+                          ),
+                        ],
+                      )
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -194,15 +270,18 @@ class _Game extends State<Game> {
                                     focusColor: Colors.yellow[800],
                                     splashColor: Colors.yellow[800],
                                     elevation: 10,
-                                    onPressed: () {
-                                      
-                                      Timer.periodic(Duration(seconds:1),
+                                    onPressed: () async{
+                                      if (_firstPress){
+                                        _firstPress = false;
+                                        Timer.periodic(Duration(seconds:1),
                                           (timer) {
-                                        if (timeState.time == 0) {
-                                          timer.cancel();
-                                        }
-                                        else {timeState.time -= 1;}
-                                      });
+                                            if (timeState.time == 0) {
+                                              timer.cancel();
+                                            }
+                                            else {timeState.time -= 1;}
+                                          });
+                                      }
+                                      
                                     },
                                     label: Text(
                                             'START GAME',
@@ -210,7 +289,7 @@ class _Game extends State<Game> {
                                                 fontFamily: 'NunitoBold',
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w900,
-                                                fontSize: 7),
+                                                fontSize: 6),
                                           ),
                                     //icon: Icon(Icons.copy),
                                   ),
@@ -230,7 +309,7 @@ class _Game extends State<Game> {
                                             child: Container(),
                                           ),
                                           Expanded(
-                                            flex: 4,
+                                            flex: 10,
                                             child: FloatingActionButton(
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
@@ -269,7 +348,7 @@ class _Game extends State<Game> {
                                             child: Container(),
                                           ),
                                           Expanded(
-                                            flex: 4,
+                                            flex: 10,
                                             child: FloatingActionButton(
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
@@ -294,12 +373,90 @@ class _Game extends State<Game> {
                                   ],
                                 ),
                               ),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Container(),
+                                    ),
+                                    Expanded(
+                                      flex: 8,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(),
+                                          ),
+                                          Expanded(
+                                            flex: 10,
+                                            child: FloatingActionButton(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16)),
+                                              onPressed: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context){
+                                                      return ExitDialog();                                                                  
+                                                    }                                                                 
+                                                );
+                                              },
+                                              child: Icon(
+                                                Icons.exit_to_app_rounded,
+                                                size: 30,
+                                              ),
+                                              backgroundColor: Colors.yellow[700],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(),
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
                         ),
                         Expanded(
                           flex: 6,
-                          child: Container(color: Colors.blueGrey),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 50,
+                                child:Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 40,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          color: Color.fromRGBO(10,94,251,0.4),
+                                          child: Chat(),
+                                        ),
+                                      ),
+                                    ),
+                                     Expanded(
+                                      child: Container(
+                                        //color: Colors.cyan,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                                
+                              ),
+                              Expanded(
+                                child: Container(
+                                  //color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          
                         ),
                       ],
                     ),
