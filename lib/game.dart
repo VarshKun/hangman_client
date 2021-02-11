@@ -9,15 +9,20 @@ import 'dart:async';
 import 'exitDialog.dart';
 import 'informationDialog.dart';
 
-bool _waiting = true;
+//bool _waiting = true;
 
 class Game extends StatefulWidget {
+  final int _category;
+  Game(this._category);
+  
   @override
-  _Game createState() => _Game();
+  _Game createState() => _Game(_category);
 }
 
 class _Game extends State<Game> {
-  var _firstPress = true ;  
+  var _firstPress = true ;
+  final int _category;
+  _Game(this._category);  
   @override
   Widget build(BuildContext context) {
     //return WillPopScope(
@@ -358,7 +363,7 @@ class _Game extends State<Game> {
                                                 showDialog(
                                                     context: context,
                                                     builder: (BuildContext context){
-                                                      return InformationDialog();                                                                  
+                                                      return InformationDialog(_category);                                                                  
                                                     }                                                                 
                                                 );
                                               },

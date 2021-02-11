@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Category extends StatefulWidget { 
+  static Set<String> categoryNames = {
+    'General',
+    'Animals',
+    'Foods',
+    'Games',
+    'Jobs',
+    'Objects',
+    'Pokemon'
+  };
 
   final ValueChanged<int> onSelectedIndexChanged;
 
@@ -23,15 +32,7 @@ class _Category extends State<Category> {
     'assets/avatars/objects.png',
     'assets/avatars/pokemon.png'
   };
-  Set<String> categoryNames = {
-    'General',
-    'Animals',
-    'Foods',
-    'Games',
-    'Jobs',
-    'Objects',
-    'Pokemon'
-  };
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,7 @@ class _Category extends State<Category> {
                         //child: InputDecorator(
                           //decoration: (InputDecoration()),
                           child: Text(
-                            categoryNames.elementAt(index),
+                            Category.categoryNames.elementAt(index),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18,

@@ -590,7 +590,7 @@ class _CreateRoom extends State<CreateRoom> {
                                                             Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
-                                                                  builder: (context) => Game()
+                                                                  builder: (context) => Game(_category)
                                                               ),
                                                             ),
                                                             showDialog(

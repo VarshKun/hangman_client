@@ -1,9 +1,11 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
-import 'package:hangman_multiplayer/createroom.dart';
 import 'package:lottie/lottie.dart';
-
+import 'package:hangman_multiplayer/category.dart';
 class _InformationDialog extends State<InformationDialog>{
+  final int _category;
+  _InformationDialog(this._category);
+
   
   dialogContent(BuildContext context){
     return Container(
@@ -94,7 +96,7 @@ class _InformationDialog extends State<InformationDialog>{
             children: [
               Expanded(
                 child: Text(
-                  "General",
+                  Category.categoryNames.elementAt(_category),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'NunitoBold',
@@ -139,7 +141,10 @@ class _InformationDialog extends State<InformationDialog>{
   }
 }
 class InformationDialog extends StatefulWidget {
+  final int _category;
+  InformationDialog(this._category);
+
 
   @override
-  _InformationDialog createState() => _InformationDialog();
+  _InformationDialog createState() => _InformationDialog(_category);
 }
