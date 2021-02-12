@@ -23,7 +23,7 @@ class _ImageAvatar extends State<HomeScreen> {
     'assets/avatars/avatar10.png',
     
   };
-  var currentIndex = 0;
+  var avatarIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -166,10 +166,10 @@ class _ImageAvatar extends State<HomeScreen> {
                                               heroTag: null,
                                               onPressed: () {
                                                 setState(() {
-                                                  if (currentIndex == 0) {
-                                                    currentIndex = imgPaths.length - 1;
+                                                  if (avatarIndex == 0) {
+                                                    avatarIndex = imgPaths.length - 1;
                                                   } else {
-                                                    currentIndex -= 1;
+                                                    avatarIndex -= 1;
                                                   }
                                                 });
                                               },
@@ -194,7 +194,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                         radius: 62,
                                         child: CircleAvatar(
                                           radius: 60,
-                                          child: Image.asset(imgPaths.elementAt(currentIndex)),
+                                          child: Image.asset(imgPaths.elementAt(avatarIndex)),
                                           backgroundColor: Colors.transparent,
                                         ),
                                       ),
@@ -213,10 +213,10 @@ class _ImageAvatar extends State<HomeScreen> {
                                               heroTag: null,
                                               onPressed: () {
                                                 setState(() {
-                                                  if ((imgPaths.length - 1) == currentIndex)
-                                                    currentIndex = 0;
+                                                  if ((imgPaths.length - 1) == avatarIndex)
+                                                    avatarIndex = 0;
                                                   else
-                                                    currentIndex += 1;
+                                                    avatarIndex += 1;
                                                 });
                                               },
                                               child: Icon(Icons.arrow_forward_ios_rounded),
@@ -373,7 +373,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) => CreateRoom()),
+                                                    builder: (context) => CreateRoom(avatarIndex)),
                                               );
                                             },
                                             child: Align(

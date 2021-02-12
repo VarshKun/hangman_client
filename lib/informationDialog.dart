@@ -4,7 +4,8 @@ import 'package:lottie/lottie.dart';
 import 'package:hangman_multiplayer/category.dart';
 class _InformationDialog extends State<InformationDialog>{
   final int _category;
-  _InformationDialog(this._category);
+  final String dropdownValue2;
+  _InformationDialog(this._category,this.dropdownValue2);
 
   
   dialogContent(BuildContext context){
@@ -103,14 +104,12 @@ class _InformationDialog extends State<InformationDialog>{
                     fontSize: 15,
                     color: Colors.black54
                   ),
-                )
-                
-                
+                ),
               ),
               
               Expanded(
                 child: Text(
-                  "150 points",
+                  "$dropdownValue2",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'NunitoBold',
@@ -142,9 +141,10 @@ class _InformationDialog extends State<InformationDialog>{
 }
 class InformationDialog extends StatefulWidget {
   final int _category;
-  InformationDialog(this._category);
+  final String dropdownValue2;
+  InformationDialog(this._category, this.dropdownValue2);
 
 
   @override
-  _InformationDialog createState() => _InformationDialog(_category);
+  _InformationDialog createState() => _InformationDialog(_category,dropdownValue2);
 }

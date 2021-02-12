@@ -3,7 +3,7 @@ import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:hangman_multiplayer/category.dart';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:hangman_multiplayer/customDialog.dart';
+import 'package:hangman_multiplayer/inviteDialog.dart';
 import 'package:hangman_multiplayer/menupage.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
@@ -11,8 +11,10 @@ import 'game.dart';
 import 'hangman_client.dart';
 
 int _category = 0;
-
+int _avatarIndex = 0;
 class CreateRoom extends StatefulWidget {
+  CreateRoom(int avatarIndex){_avatarIndex = avatarIndex;}
+
   
   @override
   _CreateRoom createState() => _CreateRoom();
@@ -20,7 +22,7 @@ class CreateRoom extends StatefulWidget {
 
 class _CreateRoom extends State<CreateRoom> {
   String dropdownValue1 = '2';
-  String dropdownValue2 = '70';
+  String pointsToWin = '70';
   bool _value01 = false;
   bool _isLoading = false;
   String dataRecv = "";
@@ -30,7 +32,7 @@ class _CreateRoom extends State<CreateRoom> {
       _isLoading = true;
     });
 
-    tcpSend(dataHandler, errorHandler, "newmatch/$_category/$dropdownValue1/$dropdownValue2");
+    tcpSend(dataHandler, errorHandler, "newmatch/$_category/$dropdownValue1/$pointsToWin");
     
     return Future.delayed(
       Duration(seconds: 2),
@@ -362,7 +364,7 @@ class _CreateRoom extends State<CreateRoom> {
                                                           alignedDropdown: true,
                                                           child: DropdownButton<String>(
                                                             isExpanded: true,
-                                                            value: dropdownValue2,
+                                                            value: pointsToWin,
                                                             iconSize: 24,
                                                             elevation: 1,
                                                             style: TextStyle(color: Colors.black, fontSize: 18),
@@ -372,7 +374,7 @@ class _CreateRoom extends State<CreateRoom> {
                                                             ),
                                                             onChanged: (String newValue) {
                                                               setState(() {
-                                                                dropdownValue2 = newValue;
+                                                                pointsToWin = newValue;
                                                               });
                                                             },
                                                             items: <String>[
@@ -434,16 +436,16 @@ class _CreateRoom extends State<CreateRoom> {
                                                 Expanded(
                                                   flex: 2,
                                                   child: AdvancedSwitch(
-                                                                activeColor: Colors.blue,
-                                                                activeChild: Text('ON'),
-                                                                inactiveChild: Text('OFF'),
-                                                                borderRadius: BorderRadius.circular(5),
-                                                                width: 58,
-                                                                value: _value01,
-                                                                onChanged: (value) => setState(() {
-                                                                  _value01 = value;
-                                                                }),
-                                                              ),
+                                                    activeColor: Colors.blue,
+                                                    activeChild: Text('ON'),
+                                                    inactiveChild: Text('OFF'),
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    width: 58,
+                                                    value: _value01,
+                                                    onChanged: (value) => setState(() {
+                                                      _value01 = value;
+                                                    }),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -585,20 +587,22 @@ class _CreateRoom extends State<CreateRoom> {
                                                       onPressed: (){
                                                         showOverlay().then
                                                         (
-                                                          (value) =>                                                     
+                                                          (createGameResponse) =>                                                     
                                                           {
                                                             Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
-                                                                  builder: (context) => Game(_category)
+                                                                  builder: (context) => Game(_category,pointsToWin,createGameResponse,_avatarIndex)
                                                               ),
                                                             ),
                                                             showDialog(
                                                                 context: context,
                                                                 builder: (BuildContext context){
-                                                                  return CustomDialog(value);                                                                  
+                                                                  return CustomDialog(createGameResponse);                                                                  
                                                                 }                                                                 
-                                                            ),
+                                                            ).then((value) => {
+
+                                                            }),
                                                           } 
                                                         );                                                    
                                                       },

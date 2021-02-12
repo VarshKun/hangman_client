@@ -1,33 +1,76 @@
+import 'dart:convert';
+
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hangman_multiplayer/chatbox.dart';
 import 'package:hangman_multiplayer/customProgressBar.dart';
+import 'package:hangman_multiplayer/hangman_client.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'dart:async';
+//import 'dart:async';
 
 import 'exitDialog.dart';
 import 'informationDialog.dart';
 
 //bool _waiting = true;
 
+// ignore: must_be_immutable
 class Game extends StatefulWidget {
   final int _category;
-  Game(this._category);
+  final String pointsToWin;
+  final String createGameResponse;
+  String matchId;
+  int avatarIndex;
+  String playerId;
+  
+  Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex){
+    try {
+      final parsed = json.decode(createGameResponse); 
+      this.matchId = parsed['matchId'];
+      tcpSend(joinGameHandler, errorHandler,"joinmatch/$matchId/[playername]/$avatarIndex");
+    } on FormatException catch (e) {
+      print("That string didn't look like Json." + e.message);
+    } on NoSuchMethodError catch (e) {
+      print('That string was null!' + e.stackTrace.toString());
+    }    
+  }
+  void joinGameHandler(data){
+    try {
+      final parsed = json.decode(createGameResponse); 
+      if (parsed['playerId'] != null){
+        this.playerId = parsed['playerId'];
+      }
+      else if(parsed['error'] != null){
+        print(parsed['error']);
+      }
+      else{
+        print("Unknown error");
+      }
+    } on FormatException catch (e) {
+      print("That string didn't look like Json." + e.message);
+    } on NoSuchMethodError catch (e) {
+      print('That string was null!' + e.stackTrace.toString());
+    }    
+  }
+
+  void errorHandler(Object error, StackTrace trace){
+    print(error);
+  }
   
   @override
-  _Game createState() => _Game(_category);
+  _Game createState() => _Game(_category,pointsToWin);
 }
 
 class _Game extends State<Game> {
-  var _firstPress = true ;
+  //var _firstPress = true ;
   final int _category;
-  _Game(this._category);  
+  final String pointsToWin;
+  _Game(this._category,this.pointsToWin);  
   @override
   Widget build(BuildContext context) {
-    //return WillPopScope(
-    //onWillPop: () async => false ,
-    return ChangeNotifierProvider(
+    return WillPopScope(
+    onWillPop: () async => false ,
+    child: ChangeNotifierProvider(
       create: (context) => TimeState(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -38,74 +81,76 @@ class _Game extends State<Game> {
               flex: 9,
               child: Container(
                 color:Colors.white,
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            flex:2,
-                            child:Container(
-                              
-                            )
-                          ),
-                          Expanded(
-                            child: BorderedText(
-                              strokeWidth: 3,
-                              strokeColor: Colors.grey[900],
-                              child: Text(
-                                'WAITING',
-                                style: TextStyle(
-                                  fontFamily: 'NunitoBold',
-                                  fontSize: 20,
-                                  color: Colors.yellow[700],
-                                  shadows: <Shadow>[
-                                    Shadow(
-                                      color: Colors.black,
-                                      offset: Offset(3,2),
-                                      blurRadius: 3
-                                    )
-                                  ]
+                child: Center(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex:2,
+                              child:Container(
+                                
+                              )
+                            ),
+                            Expanded(
+                              child: BorderedText(
+                                strokeWidth: 3,
+                                strokeColor: Colors.grey[900],
+                                child: Text(
+                                  'WAITING',
+                                  style: TextStyle(
+                                    fontFamily: 'NunitoBold',
+                                    fontSize: 20,
+                                    color: Colors.yellow[700],
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        color: Colors.black,
+                                        offset: Offset(3,2),
+                                        blurRadius: 3
+                                      )
+                                    ]
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Lottie.asset(
-                        'assets/animations/waiting_pigeon.json',
-                        width: 400,
-                        height: 200
+                          ],
+                        )
                       ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child:Text(
-                              'WAITING FOR PLAYERS',
-                              style: TextStyle(
-                                fontFamily: 'NunitoBold',
-                                fontSize:14,
-                                color: Colors.blueGrey[600]
-                              ),
-                            )
-                          ),
-                          Expanded(
-                            flex:2,
-                            child:Container(
-                              
-                            )
-                          ),
-                        ],
-                      )
-                    ),
-                  ],
+                      Expanded(
+                        flex: 3,
+                        child: Lottie.asset(
+                          'assets/animations/waiting_pigeon.json',
+                          width: 400,
+                          height: 200
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child:Text(
+                                'WAITING FOR PLAYERS',
+                                style: TextStyle(
+                                  fontFamily: 'NunitoBold',
+                                  fontSize:14,
+                                  color: Colors.blueGrey[600]
+                                ),
+                              )
+                            ),
+                            Expanded(
+                              flex:2,
+                              child:Container(
+                                
+                              )
+                            ),
+                          ],
+                        )
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -268,39 +313,39 @@ class _Game extends State<Game> {
                         Expanded(
                           child: Row(
                             children: [
-                              Expanded(
-                                child: Consumer<TimeState>(
-                                  builder: (context, timeState, _) =>
-                                      FloatingActionButton.extended(
-                                    backgroundColor:  Colors.yellow[700],
-                                    focusColor: Colors.yellow[800],
-                                    splashColor: Colors.yellow[800],
-                                    elevation: 10,
-                                    onPressed: () async{
-                                      if (_firstPress){
-                                        _firstPress = false;
-                                        Timer.periodic(Duration(seconds:1),
-                                          (timer) {
-                                            if (timeState.time == 0) {
-                                              timer.cancel();
-                                            }
-                                            else {timeState.time -= 1;}
-                                          });
-                                      }
+                              // Expanded(
+                              //   child: Consumer<TimeState>(
+                              //     builder: (context, timeState, _) =>
+                              //         FloatingActionButton.extended(
+                              //       backgroundColor:  Colors.yellow[700],
+                              //       focusColor: Colors.yellow[800],
+                              //       splashColor: Colors.yellow[800],
+                              //       elevation: 10,
+                              //       onPressed: () async{
+                              //         if (_firstPress){
+                              //           _firstPress = false;
+                              //           Timer.periodic(Duration(seconds:1),
+                              //             (timer) {
+                              //               if (timeState.time == 0) {
+                              //                 timer.cancel();
+                              //               }
+                              //               else {timeState.time -= 1;}
+                              //             });
+                              //         }
                                       
-                                    },
-                                    label: Text(
-                                            'START GAME',
-                                            style: TextStyle(
-                                                fontFamily: 'NunitoBold',
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 6),
-                                          ),
-                                    //icon: Icon(Icons.copy),
-                                  ),
-                                ),
-                              ),
+                              //       },
+                              //       label: Text(
+                              //               'START GAME',
+                              //               style: TextStyle(
+                              //                   fontFamily: 'NunitoBold',
+                              //                   color: Colors.black,
+                              //                   fontWeight: FontWeight.w900,
+                              //                   fontSize: 6),
+                              //             ),
+                              //       //icon: Icon(Icons.copy),
+                              //     ),
+                              //   ),
+                              // ),
                               Expanded(
                                 child: Column(
                                   children: [
@@ -363,7 +408,7 @@ class _Game extends State<Game> {
                                                 showDialog(
                                                     context: context,
                                                     builder: (BuildContext context){
-                                                      return InformationDialog(_category);                                                                  
+                                                      return InformationDialog(_category,pointsToWin);                                                                  
                                                     }                                                                 
                                                 );
                                               },
@@ -480,9 +525,9 @@ class _Game extends State<Game> {
           ],
         ),
       ),
-    );
-
-    //);
+    ),
+  );
+    
   }
 }
 
