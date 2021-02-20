@@ -12,8 +12,9 @@ import 'hangman_client.dart';
 
 int _category = 0;
 int _avatarIndex = 0;
+String _username;
 class CreateRoom extends StatefulWidget {
-  CreateRoom(int avatarIndex){_avatarIndex = avatarIndex;}
+  CreateRoom(int avatarIndex, String username){_avatarIndex = avatarIndex;_username = username;}
 
   
   @override
@@ -26,7 +27,7 @@ class _CreateRoom extends State<CreateRoom> {
   bool _value01 = false;
   bool _isLoading = false;
   String dataRecv = "";
-  
+
   Future<String> showOverlay() {
     setState(() {
       _isLoading = true;
@@ -592,7 +593,7 @@ class _CreateRoom extends State<CreateRoom> {
                                                             Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
-                                                                  builder: (context) => Game(_category,pointsToWin,createGameResponse,_avatarIndex)
+                                                                  builder: (context) => Game(_category,pointsToWin,createGameResponse,_avatarIndex,_username)
                                                               ),
                                                             ),
                                                             showDialog(

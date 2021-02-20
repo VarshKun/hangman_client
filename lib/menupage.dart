@@ -24,7 +24,18 @@ class _ImageAvatar extends State<HomeScreen> {
     
   };
   var avatarIndex = 0;
-
+  final usernameController = TextEditingController();
+  void initState() {
+  super.initState();
+  usernameController.addListener(() {
+    final text = usernameController.text.toLowerCase();
+    usernameController.value = usernameController.value.copyWith(
+      text: text,
+      selection: TextSelection(baseOffset: text.length, extentOffset: text.length),
+      composing: TextRange.empty,
+    );
+  });
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -257,6 +268,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                         Expanded(
                                           flex: 2,
                                           child: TextField(
+                                            controller: usernameController,
                                             style: TextStyle(
                                               fontFamily: 'ComfortaaBold'
                                             ),
@@ -373,7 +385,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) => CreateRoom(avatarIndex)),
+                                                    builder: (context) => CreateRoom(avatarIndex,usernameController.text)),
                                               );
                                             },
                                             child: Align(

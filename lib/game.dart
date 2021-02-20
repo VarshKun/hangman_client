@@ -22,12 +22,13 @@ class Game extends StatefulWidget {
   String matchId;
   int avatarIndex;
   String playerId;
-  
-  Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex){
+  final String _username;
+  //Text username = Text(usernameController.toString());
+  Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex, this._username){
     try {
       final parsed = json.decode(createGameResponse); 
       this.matchId = parsed['matchId'];
-      tcpSend(joinGameHandler, errorHandler,"joinmatch/$matchId/[playername]/$avatarIndex");
+      tcpSend(joinGameHandler, errorHandler,"joinmatch/$matchId/$_username/$avatarIndex");
     } on FormatException catch (e) {
       print("That string didn't look like Json." + e.message);
     } on NoSuchMethodError catch (e) {
@@ -58,14 +59,15 @@ class Game extends StatefulWidget {
   }
   
   @override
-  _Game createState() => _Game(_category,pointsToWin);
+  _Game createState() => _Game(_category,pointsToWin,_username);
 }
 
 class _Game extends State<Game> {
   //var _firstPress = true ;
   final int _category;
   final String pointsToWin;
-  _Game(this._category,this.pointsToWin);  
+  final String username;
+  _Game(this._category,this.pointsToWin, this.username);  
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -362,6 +364,7 @@ class _Game extends State<Game> {
                                           Expanded(
                                             flex: 10,
                                             child: FloatingActionButton(
+                                              heroTag: null,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(16)),
@@ -401,6 +404,7 @@ class _Game extends State<Game> {
                                           Expanded(
                                             flex: 10,
                                             child: FloatingActionButton(
+                                              heroTag: null,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(16)),
@@ -447,6 +451,7 @@ class _Game extends State<Game> {
                                           Expanded(
                                             flex: 10,
                                             child: FloatingActionButton(
+                                              heroTag: null,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(16)),
