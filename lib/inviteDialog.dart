@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
+
 
 // var txt = TextEditingController(text: matchId,);
 bool _hasBeenPressed = false;
@@ -150,6 +152,7 @@ class CustomDialog extends StatefulWidget {
       print('That string was null!' + e.stackTrace.toString());
     }    
   }  
+
   
 }
 

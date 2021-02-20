@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'createroom.dart';
+import 'joinroom.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -333,7 +334,13 @@ class _ImageAvatar extends State<HomeScreen> {
                                                         Colors.lightBlueAccent)),
                                             // color: Colors.lightBlueAccent,
                                             // textColor: Colors.white,
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => JoinRoom()),
+                                              );
+                                            },
                                             child: Align(
                                               child: Text(
                                                 "JOIN ROOM",
