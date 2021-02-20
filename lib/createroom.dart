@@ -4,7 +4,6 @@ import 'package:hangman_multiplayer/category.dart';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hangman_multiplayer/inviteDialog.dart';
-import 'package:hangman_multiplayer/menupage.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 import 'game.dart';
@@ -102,7 +101,8 @@ class _CreateRoom extends State<CreateRoom> {
                                                   child: IconButton(
                                                     icon: Icon(Icons.arrow_back_rounded),
                                                     onPressed: (){
-                                                      Navigator.push(context, MaterialPageRoute(builder:(context) => HomeScreen() ));
+                                                      Navigator.pop(context);
+                                                      //Navigator.push(context, MaterialPageRoute(builder:(context) => HomeScreen() ));
                                                     },
                                                     color: Colors.yellow[700],
                                                     iconSize: 35

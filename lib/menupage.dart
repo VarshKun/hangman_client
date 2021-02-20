@@ -4,6 +4,9 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'createroom.dart';
 import 'joinroom.dart';
 
+// int _avatarIndex = 0;
+// String _username;
+// String joinGameResponse;
 class HomeScreen extends StatefulWidget {
   @override
   _ImageAvatar createState() => _ImageAvatar();
@@ -338,7 +341,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) => JoinRoom()),
+                                                    builder: (context) => JoinRoom(avatarIndex,usernameController.text)),
                                               );
                                             },
                                             child: Align(

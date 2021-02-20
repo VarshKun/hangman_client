@@ -29,7 +29,7 @@ class TeddyController extends FlareControls {
   static const double _projectGaze = 60.0;
 
   String _matchId;
-
+  
   @override
   bool advance(FlutterActorArtboard artboard, double elapsed) {
     super.advance(artboard, elapsed);
@@ -124,12 +124,13 @@ class TeddyController extends FlareControls {
   //     play("hands_down");
   //   }
   // }
-
-  void submitMatchId() {
-    if (_matchId == "012345") {
+  
+  String submitMatchId() {
+    if (_matchId == "704235") {
       play("success");
     } else {
       play("fail");
     }
+    return _matchId;
   }
 }

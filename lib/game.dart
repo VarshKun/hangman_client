@@ -7,12 +7,12 @@ import 'package:hangman_multiplayer/customProgressBar.dart';
 import 'package:hangman_multiplayer/hangman_client.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-//import 'dart:async';
+
 
 import 'exitDialog.dart';
 import 'informationDialog.dart';
 
-//bool _waiting = true;
+
 
 // ignore: must_be_immutable
 class Game extends StatefulWidget {
