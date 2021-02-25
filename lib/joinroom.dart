@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:bordered_text/bordered_text.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:hangman_multiplayer/teddy_controller.dart';
 import 'package:hangman_multiplayer/tracking_text_input.dart';
+import 'game.dart';
 import 'hangman_client.dart';
 import 'join_game.dart';
 
@@ -31,7 +33,11 @@ class _JoinRoom extends State<JoinRoom>{
   TeddyController _teddyController;
   int avatarIndex;
   String username;
+  String _correct;
+  String joinGameResponse;
   _JoinRoom(this.avatarIndex, this.username);
+
+  
   @override
   void initState() { 
     _teddyController = TeddyController();
@@ -41,20 +47,42 @@ class _JoinRoom extends State<JoinRoom>{
     String _data = new String.fromCharCodes(data).trim();
     try {
       final parsed = json.decode(_data); 
-      if (parsed['playerId'] != null){
-        this.playerId = parsed['playerId'];
+      if (parsed['playerid'] != null){
+        this.playerId = parsed['playerid'];
+        _teddyController.submitMatchId(playerId);
+        _correct = _teddyController.codeCheck();
+        Timer (Duration(seconds:2), (){
+            if (_correct == 'true' ){
+            int _avatarIndex;
+            int _category;
+            String pointsToWin;
+            String createGameResponse;
+            String _username;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Game(_category,pointsToWin,createGameResponse,_avatarIndex,_username)
+              ),
+            );
+            
+          }
+        });   
+
       }
       else if(parsed['error'] != null){
         print(parsed['error']);
+        _teddyController.submitMatchId(playerId);
       }
       else{
         print("Unknown error");
+        _teddyController.submitMatchId(playerId);
       }
     } on FormatException catch (e) {
       print("That string didn't look like Json." + e.message);
     } on NoSuchMethodError catch (e) {
       print('That string was null!' + e.stackTrace.toString());
-    }    
+    } 
+    
   }
 
   void errorHandler(Object error, StackTrace trace){
@@ -209,8 +237,17 @@ class _JoinRoom extends State<JoinRoom>{
                       child: Column(
                         children: [
                           Expanded(
-                            flex: 1,
-                            child: Container(color: Colors.white,),
+                            flex: 3,
+                            child: Center(
+                              child: Text(
+                                'Join party :',
+                                style: TextStyle(
+                                  fontFamily: 'NunitoBold',
+                                  fontSize:24,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           ),
                           Expanded(
                             flex: 3,
@@ -227,14 +264,14 @@ class _JoinRoom extends State<JoinRoom>{
                             ),
                           ),
                           Expanded(
-                            flex: 3,
+                            flex: 5,
                             child: Column(
                               children: [
                                 Expanded(
                                   child: Row(
                                     children: [
                                       Expanded(
-                                        child: Container(color: Colors.cyan),
+                                        child: Container(),
                                       ),
                                       Expanded(
                                         flex: 3,
@@ -247,28 +284,10 @@ class _JoinRoom extends State<JoinRoom>{
                                             _teddyController.lookAt(caret);
                                           },
                                         ),
-                                        // child: TextFormField(
-                                        //   focusNode: roomCodeFocusNode,
-                                        //   controller: roomCodeController,
-                                        //   decoration: InputDecoration(
-                                        //     focusedBorder: OutlineInputBorder(
-                                        //       borderSide: BorderSide(
-                                        //         color: Colors.black,
-                                        //         width: 1,
-                                        //       ),
-                                        //       borderRadius: BorderRadius.circular(10),
-                                        //     ),
-                                        //     enabledBorder: OutlineInputBorder(
-                                        //       borderSide:
-                                        //           BorderSide(color: Colors.black, width: 1),
-                                        //       borderRadius: BorderRadius.circular(10),
-                                        //     ),
-                                        //     hintText: "Room code:"
-                                        //   ),
-                                        // ),
+                                        
                                       ),
                                       Expanded(
-                                        child: Container(color: Colors.cyan),
+                                        child: Container(),
                                       ),
                                     ],
                                   )
@@ -301,53 +320,21 @@ class _JoinRoom extends State<JoinRoom>{
                                                 ),
                                                 onPressed: (){
                                                   //_teddyController.submitMatchId();
-                                                  _matchId = _teddyController.submitMatchId();
                                                   try {
+                                                    _matchId = _teddyController.getMatchId();
                                                     tcpSend(joinGameHandler, errorHandler,"joinmatch/$_matchId/$username/$avatarIndex");
                                                   } on FormatException catch (e) {
                                                     print("That string didn't look like Json." + e.message);
                                                   } on NoSuchMethodError catch (e) {
                                                     print('That string was null!' + e.stackTrace.toString());
                                                   }    
-                                                  // Navigator.push(
-                                                  //   context, MaterialPageRoute(
-                                                  //     builder:(
-                                                  //       context
-                                                  //     ) =>  )
-                                                  // );
+                                                  
+                                                  
+                                                  
+                                                
                                                 },
                                               )
-                                              // child: ElevatedButton(
-                                              //   style:ButtonStyle(
-                                              //     backgroundColor: MaterialStateProperty.all<Color>(
-                                              //       Colors.yellow[700]
-                                              //     ),
-                                              //   ),
-                                                //child: Align(
-                                                  // child: Text(
-                                                  //   "JOIN GAME",
-                                                  //   textAlign: TextAlign.center,
-                                                  //   style: TextStyle(
-                                                  //       fontFamily: 'PumpkinCheesecake',
-                                                  //       fontSize: 35,
-                                                  //       color: Colors.white
-                                                  //   ),
-                                                  // ),
-                                                //),
-                                                //onPressed: (){
-                                                  //_teddyController.submitMatchId();
-                                                //   if(roomCodeController.text.compareTo(matchId) == 0){
-                                                //     setState(() {
-                                                //       animationType = "success";                               
-                                                //     });
-                                                //   }
-                                                //   else {
-                                                //     setState(() {
-                                                //       animationType = "fail";                               
-                                                //     });
-                                                //   }
-                                                //},
-                                              //),
+                                              
                                             ),
                                             Expanded(
                                               child: Container(),

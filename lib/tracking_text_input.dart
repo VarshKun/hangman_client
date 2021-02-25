@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 import 'input_helper.dart';
 
@@ -62,8 +63,12 @@ class _TrackingTextInputState extends State<TrackingTextInput> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 5.0),
       child: TextFormField(
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          keyboardType: TextInputType.number,
+          maxLength: 6,
+          
           decoration: InputDecoration(
-            
+            contentPadding: EdgeInsets.all(8),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.black,

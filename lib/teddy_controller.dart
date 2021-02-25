@@ -112,6 +112,9 @@ class TeddyController extends FlareControls {
     _matchId = value;
   }
 
+  String getMatchId(){
+    return _matchId;
+  }
   // bool _isCoveringEyes = false;
   // void coverEyes(bool cover) {
   //   if (_isCoveringEyes == cover) {
@@ -124,13 +127,24 @@ class TeddyController extends FlareControls {
   //     play("hands_down");
   //   }
   // }
-  
-  String submitMatchId() {
-    if (_matchId == "704235") {
+  bool correct;
+  String _correct;
+  String newRandPlayerId = "";
+  void submitMatchId(String playerId) {
+ 
+    if ( playerId != null) {
       play("success");
+      correct = true;
     } else {
       play("fail");
+      correct = false;
     }
-    return _matchId;
+    
+   
+  }
+  String codeCheck() {
+    _correct = correct.toString();
+    return _correct;
   }
 }
+
