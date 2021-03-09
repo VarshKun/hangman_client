@@ -19,25 +19,42 @@ class Game extends StatefulWidget {
   final int _category;
   final String pointsToWin;
   final String createGameResponse;
+  final String matchStatusResponse;
   String matchId;
   int avatarIndex;
   String playerId;
   final String _username;
+  String _playerId;
+  String matchStatus;
   //Text username = Text(usernameController.toString());
-  Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex, this._username){
-    try {
-      final parsed = json.decode(createGameResponse); 
-      this.matchId = parsed['matchId'];
-      tcpSend(joinGameHandler, errorHandler,"joinmatch/$matchId/$_username/$avatarIndex");
-    } on FormatException catch (e) {
-      print("That string didn't look like Json." + e.message);
-    } on NoSuchMethodError catch (e) {
-      print('That string was null!' + e.stackTrace.toString());
-    }    
+  Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex, this._username, this._playerId,this.matchStatusResponse){
+    if (_category != null){
+      try {
+        final parsed = json.decode(createGameResponse); 
+        this.matchId = parsed['matchId'];
+        tcpSend(joinGameHandler, errorHandler,"joinmatch/$matchId/$_username/$avatarIndex");
+      } on FormatException catch (e) {
+        print("That string didn't look like Json." + e.message);
+      } on NoSuchMethodError catch (e) {
+        print('That string was null!' + e.stackTrace.toString());
+      }    
+    }
+    else {
+      try {
+        tcpSend(matchStatusHandler, errorHandler,"matchstatus/$matchId");
+      } on FormatException catch (e) {
+        print("That string didn't look like Json." + e.message);
+      } on NoSuchMethodError catch (e) {
+        print('That string was null!' + e.stackTrace.toString());
+      }       
+    }
+
   }
+  
   void joinGameHandler(data){
+    String _data = new String.fromCharCodes(data).trim();
     try {
-      final parsed = json.decode(createGameResponse); 
+      final parsed = json.decode(_data);
       if (parsed['playerId'] != null){
         this.playerId = parsed['playerId'];
       }
@@ -51,9 +68,35 @@ class Game extends StatefulWidget {
       print("That string didn't look like Json." + e.message);
     } on NoSuchMethodError catch (e) {
       print('That string was null!' + e.stackTrace.toString());
-    }    
+    } 
+    try {
+      tcpSend(matchStatusHandler, errorHandler,"matchstatus/$matchId");
+    } on FormatException catch (e) {
+      print("That string didn't look like Json." + e.message);
+    } on NoSuchMethodError catch (e) {
+      print('That string was null!' + e.stackTrace.toString());
+    }       
+    
   }
-
+  void matchStatusHandler(data){
+    String _data = new String.fromCharCodes(data).trim();
+    try {
+        final parsed = json.decode(_data); 
+        if (parsed['json'] != null){
+          this.matchStatus = parsed['json'];
+        }
+        else if(parsed['error'] != null){
+          print(parsed['error']);
+        }
+        else{
+          print("Unknown error");
+        }
+      } on FormatException catch (e) {
+        print("That string didn't look like Json." + e.message);
+      } on NoSuchMethodError catch (e) {
+        print('That string was null!' + e.stackTrace.toString());
+      }    
+  }
   void errorHandler(Object error, StackTrace trace){
     print(error);
   }

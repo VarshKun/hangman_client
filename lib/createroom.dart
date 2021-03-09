@@ -586,6 +586,8 @@ class _CreateRoom extends State<CreateRoom> {
                                                       splashColor: Colors.yellow[800],
                                                       elevation: 10,
                                                       onPressed: (){
+                                                        String _playerId;
+                                                        //String matchStatusResponse;
                                                         showOverlay().then
                                                         (
                                                           (createGameResponse) =>                                                     
@@ -593,7 +595,7 @@ class _CreateRoom extends State<CreateRoom> {
                                                             Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
-                                                                  builder: (context) => Game(_category,pointsToWin,createGameResponse,_avatarIndex,_username)
+                                                                  builder: (context) => Game(_category,pointsToWin,createGameResponse,_avatarIndex,_username,_playerId,null)
                                                               ),
                                                             ),
                                                             showDialog(

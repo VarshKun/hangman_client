@@ -53,18 +53,19 @@ class _JoinRoom extends State<JoinRoom>{
         _correct = _teddyController.codeCheck();
         Timer (Duration(seconds:2), (){
             if (_correct == 'true' ){
-            int _avatarIndex;
-            int _category;
-            String pointsToWin;
-            String createGameResponse;
-            String _username;
+            //int _avatarIndex;
+            //int _category;
+            //String pointsToWin;
+            //String createGameResponse;
+            //String matchStatusResponse;
+            //String _username;
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => Game(_category,pointsToWin,createGameResponse,_avatarIndex,_username)
+                  builder: (context) => Game(null,null,null,avatarIndex,username,playerId,null)
               ),
             );
-            
+
           }
         });   
 
@@ -328,10 +329,6 @@ class _JoinRoom extends State<JoinRoom>{
                                                   } on NoSuchMethodError catch (e) {
                                                     print('That string was null!' + e.stackTrace.toString());
                                                   }    
-                                                  
-                                                  
-                                                  
-                                                
                                                 },
                                               )
                                               
