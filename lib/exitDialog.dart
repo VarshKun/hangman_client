@@ -1,10 +1,12 @@
+import 'package:audioplayers/audio_cache.dart';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hangman_multiplayer/menupage.dart';
 import 'package:lottie/lottie.dart';
 
 class _ExitDialog extends State<ExitDialog>{
-  
+  final AudioCache musicplayer;
+  _ExitDialog(this.musicplayer);
   dialogContent(BuildContext context){
     return Container(
       
@@ -83,6 +85,7 @@ class _ExitDialog extends State<ExitDialog>{
                       flex:2,
                       child:FloatingActionButton(
                         onPressed: (){
+                          musicplayer.fixedPlayer.stop();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -160,9 +163,12 @@ class _ExitDialog extends State<ExitDialog>{
   }
 }
 class ExitDialog extends StatefulWidget {
+  final AudioCache musicplayer;
+  ExitDialog(this.musicplayer);
+
 
   @override
-  _ExitDialog createState() => _ExitDialog();
+  _ExitDialog createState() => _ExitDialog(musicplayer);
 }
 
 

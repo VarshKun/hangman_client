@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hangman_multiplayer/chatbox.dart';
@@ -8,11 +8,9 @@ import 'package:hangman_multiplayer/hangman_client.dart';
 import 'package:hangman_multiplayer/inviteDialog.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-
-
 import 'exitDialog.dart';
 import 'informationDialog.dart';
-
+import 'package:audioplayers/audio_cache.dart';
 
 
 // ignore: must_be_immutable
@@ -27,6 +25,7 @@ class Game extends StatefulWidget {
   final String _username;
   String _playerId;
   String matchStatus;
+ 
   //Text username = Text(usernameController.toString());
   Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex, this._username, this._playerId,this.matchStatusResponse){
     if (_category != null){
@@ -107,13 +106,23 @@ class Game extends StatefulWidget {
 }
 
 class _Game extends State<Game> {
+  final musicplayer = new AudioCache(fixedPlayer: AudioPlayer());
+  //AudioCache audioCache = AudioCache();
   //var _firstPress = true ;
   final int _category;
   final String pointsToWin;
   final String username;
+  bool playing = true;
   _Game(this._category,this.pointsToWin, this.username);  
   @override
   Widget build(BuildContext context) {
+    if(playing ){
+      musicplayer.loop('music/hangman-music.mp3');
+    }
+    else{
+      musicplayer.fixedPlayer.stop();
+    }
+    //audioCache.loop('music/hangman-music.mp3');
     return WillPopScope(
     onWillPop: () async => false ,
     child: ChangeNotifierProvider(
@@ -412,10 +421,30 @@ class _Game extends State<Game> {
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(16)),
-                                              onPressed: () {},
-                                              child: Icon(
+                                              onPressed: () async{
+                                                if (playing == true){
+                                                  setState(() {
+                                                    playing = false; 
+                                                    musicplayer.fixedPlayer.stop();
+                                                    //audioCache.loop('music/hangman-music.mp3');              
+                                                  });
+                                                }
+                                                else{
+                                                  setState(() {
+                                                    playing = true; 
+                                                    musicplayer.play('music/hangman-music.mp3');
+                                                    //audioCache.loop('music/hangman-music.mp3',mode: PlayerMode.LOW_LATENCY); 
+                                                    //audioCache.fixedPlayer.stop();    
+                                                                                                 
+                                                  });
+                                                }
+                                              },
+                                              child: playing?new Icon(
                                                 Icons.volume_up_rounded,
                                                 size: 30,
+                                              ): new Icon(
+                                                Icons.volume_off_rounded,
+                                                size: 30
                                               ),
                                               backgroundColor: Colors.yellow[700],
                                             ),
@@ -503,7 +532,7 @@ class _Game extends State<Game> {
                                                 showDialog(
                                                     context: context,
                                                     builder: (BuildContext context){
-                                                      return ExitDialog();                                                                  
+                                                      return ExitDialog(musicplayer);                                                                  
                                                     }                                                                 
                                                 );
                                               },
