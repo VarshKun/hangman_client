@@ -5,7 +5,8 @@ import 'package:hangman_multiplayer/category.dart';
 class _InformationDialog extends State<InformationDialog>{
   final int _category;
   final String dropdownValue2;
-  _InformationDialog(this._category,this.dropdownValue2);
+  final String roomCode;
+  _InformationDialog(this._category,this.dropdownValue2,this.roomCode);
 
   
   dialogContent(BuildContext context){
@@ -64,9 +65,11 @@ class _InformationDialog extends State<InformationDialog>{
             width: 200,
             height: 200
           ),
+       
           Row(
             children: [
               Expanded(
+                flex: 5,
                 child: Text(
                   "THEME:",
                   textAlign: TextAlign.center,
@@ -81,6 +84,7 @@ class _InformationDialog extends State<InformationDialog>{
               ),
               
               Expanded(
+                flex: 5,
                 child: Text(
                   "GOAL:",
                   textAlign: TextAlign.center,
@@ -89,6 +93,24 @@ class _InformationDialog extends State<InformationDialog>{
                     fontSize: 16,
                     color: Colors.blue
                   ),
+                )
+              ),
+              Expanded(
+                flex: 5,
+                child: Text(
+                  "ROOM CODE:",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'NunitoBold',
+                    fontSize: 13,
+                    color: Colors.blue
+                  ),
+                )
+              ),
+              Expanded(
+                flex:1,
+                child: Container(
+
                 )
               ),
             ],
@@ -110,6 +132,17 @@ class _InformationDialog extends State<InformationDialog>{
               Expanded(
                 child: Text(
                   "$dropdownValue2",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'NunitoBold',
+                    fontSize:15,
+                    color: Colors.black54
+                  ),
+                )
+              ),
+              Expanded(
+                child: Text(
+                  "$roomCode",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'NunitoBold',
@@ -142,9 +175,10 @@ class _InformationDialog extends State<InformationDialog>{
 class InformationDialog extends StatefulWidget {
   final int _category;
   final String dropdownValue2;
-  InformationDialog(this._category, this.dropdownValue2);
+  final String roomCode;
+  InformationDialog(this._category, this.dropdownValue2,this.roomCode);
 
 
   @override
-  _InformationDialog createState() => _InformationDialog(_category,dropdownValue2);
+  _InformationDialog createState() => _InformationDialog(_category,dropdownValue2,roomCode);
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hangman_multiplayer/chatbox.dart';
 import 'package:hangman_multiplayer/customProgressBar.dart';
 import 'package:hangman_multiplayer/hangman_client.dart';
+import 'package:hangman_multiplayer/inviteDialog.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -455,7 +456,7 @@ class _Game extends State<Game> {
                                                 showDialog(
                                                     context: context,
                                                     builder: (BuildContext context){
-                                                      return InformationDialog(_category,pointsToWin);                                                                  
+                                                      return InformationDialog(_category,pointsToWin,matchId);                                                                  
                                                     }                                                                 
                                                 );
                                               },

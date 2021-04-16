@@ -66,7 +66,7 @@ class _ExitDialog extends State<ExitDialog>{
             "Are you sure you want to exit the game?",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 18.0,
+              fontSize: 17.0,
               fontFamily: 'NunitoBold',
             ),
           ),

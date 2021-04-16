@@ -281,6 +281,12 @@ class _ImageAvatar extends State<HomeScreen> {
                                               ),
                                               textAlign: TextAlign.center,
                                               decoration: InputDecoration(
+                                                contentPadding:
+                                                const EdgeInsets.only(
+                                                  left: 8.0,
+                                                  bottom: 8.0,
+                                                  top: 8.0
+                                                ),
                                                 focusedBorder: OutlineInputBorder(
                                                   borderSide: BorderSide(
                                                     color: Colors.black,
