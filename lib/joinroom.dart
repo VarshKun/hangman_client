@@ -62,7 +62,7 @@ class _JoinRoom extends State<JoinRoom>{
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => Game(null,null,null,avatarIndex,username,playerId,null)
+                  builder: (context) => Game(null,null,null,avatarIndex,username,playerId,_matchId)
               ),
             );
 

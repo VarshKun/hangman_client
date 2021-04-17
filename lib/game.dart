@@ -18,7 +18,7 @@ class Game extends StatefulWidget {
   final int _category;
   final String pointsToWin;
   final String createGameResponse;
-  final String matchStatusResponse;
+  //final String matchStatusResponse;
   String matchId;
   int avatarIndex;
   String playerId;
@@ -26,8 +26,10 @@ class Game extends StatefulWidget {
   String _playerId;
   String matchStatus;
  
+ 
   //Text username = Text(usernameController.toString());
-  Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex, this._username, this._playerId,this.matchStatusResponse){
+  Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex, this._username, this._playerId,this.matchId)
+  {
     if (_category != null){
       try {
         final parsed = json.decode(createGameResponse); 
@@ -82,8 +84,11 @@ class Game extends StatefulWidget {
     String _data = new String.fromCharCodes(data).trim();
     try {
         final parsed = json.decode(_data); 
-        if (parsed['json'] != null){
-          this.matchStatus = parsed['json'];
+        if (parsed['Id'] != null){
+           parsed["players"].values.forEach((playerInfo) => {
+             print("Value: $playerInfo")
+            
+           }); 
         }
         else if(parsed['error'] != null){
           print(parsed['error']);
@@ -113,6 +118,8 @@ class _Game extends State<Game> {
   final String pointsToWin;
   final String username;
   bool playing = true;
+
+  var parsed;
   _Game(this._category,this.pointsToWin, this.username);  
   @override
   Widget build(BuildContext context) {
@@ -133,7 +140,7 @@ class _Game extends State<Game> {
         body: Column(
           children: [
             Expanded(
-              flex: 9,
+              flex: 12,
               child: Container(
                 color:Colors.white,
                 child: Center(
@@ -266,7 +273,7 @@ class _Game extends State<Game> {
                                 thickness: 5,
                                 child: ListView.builder(
                                   scrollDirection: Axis.vertical,
-                                  itemCount: 10,
+                                  itemCount: parsed,
                                   itemBuilder: (context, index) {
                                     return Container(
                                       height: 72,
@@ -283,8 +290,8 @@ class _Game extends State<Game> {
                                                     backgroundColor:
                                                         Colors.transparent,
                                                     radius: 25,
-                                                    child: Image.asset(
-                                                        'assets/avatars/default.png')),
+                                                    child: Image.asset('assets/avatars/avatar1.png'),
+                                                ),
                                               ),
                                               Expanded(
                                                 flex: 3,
