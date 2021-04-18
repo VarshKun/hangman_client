@@ -102,7 +102,7 @@ flutter:
    - assets/animations/log_out.json
    - assets/animations/setting.json
    - assets/animations/teddy.flr
-   - assets/music/hangman-music.mp3
+   - assets/music/HangmanMusicMix.mp3
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

@@ -1,13 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hangman_multiplayer/chatbox.dart';
 import 'package:hangman_multiplayer/customProgressBar.dart';
 import 'package:hangman_multiplayer/hangman_client.dart';
-import 'package:hangman_multiplayer/inviteDialog.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'avatarIndex.dart';
 import 'exitDialog.dart';
 import 'informationDialog.dart';
 import 'package:audioplayers/audio_cache.dart';
@@ -15,26 +16,59 @@ import 'package:audioplayers/audio_cache.dart';
 
 // ignore: must_be_immutable
 class Game extends StatefulWidget {
-  final int _category;
-  final String pointsToWin;
+  int _category;
+  String pointsToWin;
   final String createGameResponse;
   //final String matchStatusResponse;
   String matchId;
   int avatarIndex;
   String playerId;
   final String _username;
-  String _playerId;
+  //String _playerId;
   String matchStatus;
- 
+  var parsed; 
  
   //Text username = Text(usernameController.toString());
-  Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex, this._username, this._playerId,this.matchId)
-  {
+  Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex, this._username, this.playerId,this.matchId);
+
+  @override
+  _Game createState() => _Game(this._category,this.pointsToWin,_username, parsed,this.createGameResponse, this.avatarIndex, this.matchId);
+}
+
+class _Game extends State<Game> {
+  final musicplayer = new AudioCache(fixedPlayer: AudioPlayer());
+  //AudioCache audioCache = AudioCache();
+  //var _firstPress = true ;
+  int _category;
+  String pointsToWin;
+  final String username;
+  int avatarIndex;
+  bool playing = true;
+  dynamic _parsed;
+  var matchId;
+  var playerId;
+   dynamic get parsedP {
+    return _parsed;
+  }
+
+  set parsedP(dynamic parsed) {
+    setState(() {
+      _parsed = parsed;
+    });
+  }
+  _Game(this._category,this.pointsToWin, this.username, parsed, String createGameResponse, this.avatarIndex, this.matchId){
+    if(playing ){
+      musicplayer.loop('music/HangmanMusicMix.mp3');
+    }
+    else{
+      musicplayer.fixedPlayer.pause();
+    }
     if (_category != null){
       try {
         final parsed = json.decode(createGameResponse); 
         this.matchId = parsed['matchId'];
-        tcpSend(joinGameHandler, errorHandler,"joinmatch/$matchId/$_username/$avatarIndex");
+        tcpSend(joinGameHandler, errorHandler,"joinmatch/$matchId/$username/$avatarIndex");
+        sleep(Duration(seconds:5));
       } on FormatException catch (e) {
         print("That string didn't look like Json." + e.message);
       } on NoSuchMethodError catch (e) {
@@ -50,9 +84,7 @@ class Game extends StatefulWidget {
         print('That string was null!' + e.stackTrace.toString());
       }       
     }
-
   }
-  
   void joinGameHandler(data){
     String _data = new String.fromCharCodes(data).trim();
     try {
@@ -83,15 +115,16 @@ class Game extends StatefulWidget {
   void matchStatusHandler(data){
     String _data = new String.fromCharCodes(data).trim();
     try {
-        final parsed = json.decode(_data); 
-        if (parsed['Id'] != null){
-           parsed["players"].values.forEach((playerInfo) => {
+        parsedP = json.decode(_data);        
+        if (parsedP['Id'] != null){
+           parsedP["players"].values.forEach((playerInfo) => {
              print("Value: $playerInfo")
-            
            }); 
+           pointsToWin = parsedP["maxscore"].toString();
+           _category =  parsedP["category"];
         }
-        else if(parsed['error'] != null){
-          print(parsed['error']);
+        else if(parsedP['error'] != null){
+          print(parsedP['error']);
         }
         else{
           print("Unknown error");
@@ -105,30 +138,8 @@ class Game extends StatefulWidget {
   void errorHandler(Object error, StackTrace trace){
     print(error);
   }
-  
-  @override
-  _Game createState() => _Game(_category,pointsToWin,_username);
-}
-
-class _Game extends State<Game> {
-  final musicplayer = new AudioCache(fixedPlayer: AudioPlayer());
-  //AudioCache audioCache = AudioCache();
-  //var _firstPress = true ;
-  final int _category;
-  final String pointsToWin;
-  final String username;
-  bool playing = true;
-
-  var parsed;
-  _Game(this._category,this.pointsToWin, this.username);  
   @override
   Widget build(BuildContext context) {
-    if(playing ){
-      musicplayer.loop('music/hangman-music.mp3');
-    }
-    else{
-      musicplayer.fixedPlayer.stop();
-    }
     //audioCache.loop('music/hangman-music.mp3');
     return WillPopScope(
     onWillPop: () async => false ,
@@ -273,7 +284,7 @@ class _Game extends State<Game> {
                                 thickness: 5,
                                 child: ListView.builder(
                                   scrollDirection: Axis.vertical,
-                                  itemCount: parsed,
+                                  itemCount: parsedP == null ? 0 : parsedP["players"].length,
                                   itemBuilder: (context, index) {
                                     return Container(
                                       height: 72,
@@ -290,7 +301,7 @@ class _Game extends State<Game> {
                                                     backgroundColor:
                                                         Colors.transparent,
                                                     radius: 25,
-                                                    child: Image.asset('assets/avatars/avatar1.png'),
+                                                    child: Image.asset(AvatarIndices.imgPaths.elementAt(parsedP["players"].values.elementAt(index)["avatarIndex"])),
                                                 ),
                                               ),
                                               Expanded(
@@ -307,7 +318,7 @@ class _Game extends State<Game> {
                                                           Expanded(
                                                             flex: 2,
                                                             child: Text(
-                                                              'Empty',
+                                                              parsedP["players"].values.elementAt(index)["name"],
                                                               textAlign: TextAlign
                                                                   .center,
                                                               style: TextStyle(
@@ -327,7 +338,7 @@ class _Game extends State<Game> {
                                                           Expanded(
                                                             flex: 2,
                                                             child: Text(
-                                                              '0 pts',
+                                                              parsedP["players"].values.elementAt(index)["score"].toString() + " points" ,
                                                               textAlign: TextAlign
                                                                   .center,
                                                               style: TextStyle(
@@ -375,39 +386,7 @@ class _Game extends State<Game> {
                         Expanded(
                           child: Row(
                             children: [
-                              // Expanded(
-                              //   child: Consumer<TimeState>(
-                              //     builder: (context, timeState, _) =>
-                              //         FloatingActionButton.extended(
-                              //       backgroundColor:  Colors.yellow[700],
-                              //       focusColor: Colors.yellow[800],
-                              //       splashColor: Colors.yellow[800],
-                              //       elevation: 10,
-                              //       onPressed: () async{
-                              //         if (_firstPress){
-                              //           _firstPress = false;
-                              //           Timer.periodic(Duration(seconds:1),
-                              //             (timer) {
-                              //               if (timeState.time == 0) {
-                              //                 timer.cancel();
-                              //               }
-                              //               else {timeState.time -= 1;}
-                              //             });
-                              //         }
-                                      
-                              //       },
-                              //       label: Text(
-                              //               'START GAME',
-                              //               style: TextStyle(
-                              //                   fontFamily: 'NunitoBold',
-                              //                   color: Colors.black,
-                              //                   fontWeight: FontWeight.w900,
-                              //                   fontSize: 6),
-                              //             ),
-                              //       //icon: Icon(Icons.copy),
-                              //     ),
-                              //   ),
-                              // ),
+      
                               Expanded(
                                 child: Column(
                                   children: [
@@ -432,14 +411,14 @@ class _Game extends State<Game> {
                                                 if (playing == true){
                                                   setState(() {
                                                     playing = false; 
-                                                    musicplayer.fixedPlayer.stop();
+                                                    musicplayer.fixedPlayer.pause();
                                                     //audioCache.loop('music/hangman-music.mp3');              
                                                   });
                                                 }
                                                 else{
                                                   setState(() {
                                                     playing = true; 
-                                                    musicplayer.play('music/hangman-music.mp3');
+                                                    musicplayer.play('music/HangmanMusicMix.mp3');
                                                     //audioCache.loop('music/hangman-music.mp3',mode: PlayerMode.LOW_LATENCY); 
                                                     //audioCache.fixedPlayer.stop();    
                                                                                                  
@@ -579,7 +558,7 @@ class _Game extends State<Game> {
                                         borderRadius: BorderRadius.circular(10),
                                         child: Container(
                                           color: Color.fromRGBO(10,94,251,0.4),
-                                          child: Chat(),
+                                          child: Chat(this.avatarIndex,this.username),
                                         ),
                                       ),
                                     ),

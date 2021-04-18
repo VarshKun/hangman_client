@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hangman_multiplayer/avatarIndex.dart';
 
-// final ThemeData iOSTheme = new ThemeData(
-//   primarySwatch: Colors.red,
-//   primaryColor: Colors.grey[400],
-//   primaryColorBrightness: Brightness.dark,
-// );
-
-// final ThemeData androidTheme = new ThemeData(
-//   primarySwatch: Colors.blue,
-//   accentColor: Colors.green,
-// );
-
-const String defaultUserName = "VarshKun";
+//const String defaultUserName = "VarshKun";
 
 
 class Chat extends StatefulWidget {
+  final int avatarIndex;
+  final String username;
+  Chat(this.avatarIndex, this.username);
+
   @override
   State createState() => new ChatWindow();
 }
@@ -25,7 +19,6 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
   final List<Msg> _messages = <Msg>[];
   final TextEditingController _textController = new TextEditingController();
   bool _isWriting = false;
-
   @override
   Widget build(BuildContext ctx) {
     return new Scaffold(
@@ -63,7 +56,6 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
                         _isWriting = txt.length > 0;
                       });
                     },
-                    onSubmitted: _submitMsg,
                     decoration:
                       new InputDecoration.collapsed(hintText: "Enter letter here"),
                   ),
@@ -74,13 +66,13 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
                 child: Theme.of(context).platform == TargetPlatform.iOS
                   ? new CupertinoButton(
                     child: new Text("Submit"),
-                    onPressed: _isWriting ? () => _submitMsg(_textController.text)
+                    onPressed: _isWriting ? () => _submitMsg(_textController.text,widget.avatarIndex,widget.username)
                         : null
                 )
                     : new IconButton(
                     icon: new Icon(Icons.message),
                     onPressed: _isWriting
-                      ? () => _submitMsg(_textController.text)
+                      ? () => _submitMsg(_textController.text,widget.avatarIndex,widget.username)
                         : null,
                 )
               ),
@@ -95,24 +87,27 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
     );
   }
 
-  void _submitMsg(String txt) {
-    _textController.clear();
-    setState(() {
-      _isWriting = false;
-    });
-    Msg msg = new Msg(
-      txt: txt,
-      animationController: new AnimationController(
-          vsync: this,
-        duration: new Duration(milliseconds: 300)
-      ),
-    );
-    setState(() {
-      _messages.insert(0, msg);
-    });
-    msg.animationController.forward();
+  _submitMsg(String txt, int avatarIndex, String username) {
+    if(txt != null && txt != ""){
+      _textController.clear();
+      setState(() {
+        _isWriting = false;
+      });
+      Msg msg = new Msg(
+        avatarIndex: avatarIndex,
+        username: username,
+        txt: txt,
+        animationController: new AnimationController(
+            vsync: this,
+          duration: new Duration(milliseconds: 300)
+        ),
+      );
+      setState(() {
+        _messages.insert(0, msg);
+      });
+      msg.animationController.forward();
+    }
   }
-
   @override
   void dispose() {
     for (Msg msg in _messages) {
@@ -120,13 +115,16 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
     }
     super.dispose();
   }
-
 }
 
+// ignore: must_be_immutable
 class Msg extends StatelessWidget {
-  Msg({this.txt, this.animationController});
+  
+  Msg({this.txt, this.animationController, this.avatarIndex, this.username});
   final String txt;
   final AnimationController animationController;
+  final int avatarIndex;
+  final String username;
 
   @override
   Widget build(BuildContext ctx) {
@@ -141,7 +139,7 @@ class Msg extends StatelessWidget {
           children: <Widget>[
             new Container(
               margin: const EdgeInsets.only(right: 18.0),
-              child: new CircleAvatar(child: Image.asset('assets/avatars/default.png'),
+              child: new CircleAvatar(child: Image.asset(AvatarIndices.imgPaths.elementAt(avatarIndex)),
                 // style: TextStyle(
                 //   fontFamily: 'NunitoExtraLight'
                   
@@ -152,7 +150,7 @@ class Msg extends StatelessWidget {
               child: new Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  new Text(defaultUserName, style: TextStyle(color: Colors.white,fontFamily: 'NunitoBold',fontSize: 15)),
+                  new Text(username, style: TextStyle(color: Colors.white,fontFamily: 'NunitoBold',fontSize: 15)),
                   new Container(
                     margin: const EdgeInsets.only(top: 6.0),
                     child: new Text(txt,style:TextStyle(color: Colors.white,fontFamily: 'NunitoExtraLight',fontWeight: FontWeight.bold,fontSize: 14)),

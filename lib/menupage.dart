@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'avatarIndex.dart';
 
 import 'createroom.dart';
 import 'joinroom.dart';
 
 // int _avatarIndex = 0;
-// String _username;
+ //String _username;
 // String joinGameResponse;
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,26 +14,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _ImageAvatar extends State<HomeScreen> {
-  Set<String> imgPaths = {
-    'assets/avatars/default.png',
-    'assets/avatars/avatar1.png',
-    'assets/avatars/avatar2.png',
-    'assets/avatars/avatar3.png',
-    'assets/avatars/avatar4.png',
-    'assets/avatars/avatar5.png',
-    'assets/avatars/avatar6.png',
-    'assets/avatars/avatar7.png',
-    'assets/avatars/avatar8.png',
-    'assets/avatars/avatar9.png',
-    'assets/avatars/avatar10.png',
-    
-  };
   var avatarIndex = 0;
   final usernameController = TextEditingController();
+  bool userNameValidate = false;
+  bool validateTextField(String userInput) {
+    if (userInput.isEmpty) {
+      setState(() {
+        userNameValidate = true;
+      });
+      return false;
+    }
+    setState(() {
+      userNameValidate = false;
+    });
+    return true;
+  }
   void initState() {
   super.initState();
   usernameController.addListener(() {
-    final text = usernameController.text.toLowerCase();
+    final text = usernameController.text.toString();
     usernameController.value = usernameController.value.copyWith(
       text: text,
       selection: TextSelection(baseOffset: text.length, extentOffset: text.length),
@@ -184,7 +184,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                                 onPressed: () {
                                                   setState(() {
                                                     if (avatarIndex == 0) {
-                                                      avatarIndex = imgPaths.length - 1;
+                                                      avatarIndex = AvatarIndices.imgPaths.length - 1;
                                                     } else {
                                                       avatarIndex -= 1;
                                                     }
@@ -211,7 +211,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                           radius: 62,
                                           child: CircleAvatar(
                                             radius: 60,
-                                            child: Image.asset(imgPaths.elementAt(avatarIndex)),
+                                            child: Image.asset(AvatarIndices.imgPaths.elementAt(avatarIndex)),
                                             backgroundColor: Colors.transparent,
                                           ),
                                         ),
@@ -230,7 +230,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                                 heroTag: null,
                                                 onPressed: () {
                                                   setState(() {
-                                                    if ((imgPaths.length - 1) == avatarIndex)
+                                                    if ((AvatarIndices.imgPaths.length - 1) == avatarIndex)
                                                       avatarIndex = 0;
                                                     else
                                                       avatarIndex += 1;
@@ -274,6 +274,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                           Expanded(
                                             flex: 2,
                                             child: TextField(
+                                              textCapitalization: TextCapitalization.none,
                                               autocorrect: false,
                                               controller: usernameController,
                                               style: TextStyle(
@@ -281,6 +282,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                               ),
                                               textAlign: TextAlign.center,
                                               decoration: InputDecoration(
+                                                errorText: userNameValidate ? 'Please enter a username :)' : null,
                                                 contentPadding:
                                                 const EdgeInsets.only(
                                                   left: 8.0,
@@ -347,11 +349,15 @@ class _ImageAvatar extends State<HomeScreen> {
                                               // color: Colors.lightBlueAccent,
                                               // textColor: Colors.white,
                                               onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => JoinRoom(avatarIndex,usernameController.text)),
-                                                );
+                                                validateTextField(usernameController.text);
+                                                if (userNameValidate != true){
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => JoinRoom(avatarIndex,usernameController.text,)
+                                                      ),
+                                                  );
+                                                }               
                                               },
                                               child: Align(
                                                 child: Text(
@@ -401,11 +407,15 @@ class _ImageAvatar extends State<HomeScreen> {
                                                       MaterialStateProperty.all<Color>(
                                                           Colors.yellow[700])),
                                               onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => CreateRoom(avatarIndex,usernameController.text)),
-                                                );
+                                                validateTextField(usernameController.text);
+                                                if (userNameValidate != true){
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) => CreateRoom(avatarIndex,usernameController.text)),
+                                                  );
+                                                }
+                                                
                                               },
                                               child: Align(
                                                 child: Text(

@@ -35,16 +35,16 @@ class _CreateRoom extends State<CreateRoom> {
     tcpSend(dataHandler, errorHandler, "newmatch/$_category/$dropdownValue1/$pointsToWin");
     
     return Future.delayed(
-      Duration(seconds: 2),
+      Duration(seconds: 30),
       () => dataRecv,
     );
   }
 
   void dataHandler(data){
     dataRecv = new String.fromCharCodes(data).trim();
-    setState(() {
+    /*setState(() {
         _isLoading = false;
-      });
+      });*/
   }
 
   void errorHandler(Object error, StackTrace trace){
@@ -598,13 +598,15 @@ class _CreateRoom extends State<CreateRoom> {
                                                                   builder: (context) => Game(_category,pointsToWin,createGameResponse,_avatarIndex,_username,_playerId,null)
                                                               ),
                                                             ),
-                                                            showDialog(
+                                                            showDialog( 
                                                                 context: context,
                                                                 builder: (BuildContext context){
                                                                   return CustomDialog(createGameResponse);                                                                  
                                                                 }                                                                 
                                                             ).then((value) => {
-
+                                                                setState(() {
+                                                                  _isLoading = false;
+                                                                })
                                                             }),
                                                           } 
                                                         );                                                    

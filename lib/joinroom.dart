@@ -28,6 +28,8 @@ class JoinRoom extends StatefulWidget{
 
 class _JoinRoom extends State<JoinRoom>{
   String _matchId;
+  String pointsToWin;
+  int category;
   String playerId;
   String animationType = "idle";
   TeddyController _teddyController;
@@ -35,6 +37,8 @@ class _JoinRoom extends State<JoinRoom>{
   String username;
   String _correct;
   String joinGameResponse;
+  bool isLoading = true;
+ 
   _JoinRoom(this.avatarIndex, this.username);
 
   
@@ -52,13 +56,16 @@ class _JoinRoom extends State<JoinRoom>{
         _teddyController.submitMatchId(playerId);
         _correct = _teddyController.codeCheck();
         Timer (Duration(seconds:2), (){
-            if (_correct == 'true' ){
+          if (_correct == 'true' ){
+            isLoading = false;
             //int _avatarIndex;
             //int _category;
             //String pointsToWin;
             //String createGameResponse;
             //String matchStatusResponse;
             //String _username;
+            // pointsToWin = parsed['maxscore'];
+            // category = parsed['category'];
             Navigator.push(
               context,
               MaterialPageRoute(
