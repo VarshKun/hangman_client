@@ -117,11 +117,14 @@ class _Game extends State<Game> {
     try {
         parsedP = json.decode(_data);        
         if (parsedP['Id'] != null){
-           parsedP["players"].values.forEach((playerInfo) => {
-             print("Value: $playerInfo")
-           }); 
-           pointsToWin = parsedP["maxscore"].toString();
-           _category =  parsedP["category"];
+          parsedP["players"].values.forEach((playerInfo) => {
+            print("Value: $playerInfo")
+          }); 
+          pointsToWin = parsedP["maxscore"].toString();
+          _category =  parsedP["category"];
+          Future.delayed(const Duration(milliseconds: 1500), () {
+            tcpSend(matchStatusHandler, errorHandler,"matchstatus/$matchId");  
+          });
         }
         else if(parsedP['error'] != null){
           print(parsedP['error']);
@@ -133,7 +136,7 @@ class _Game extends State<Game> {
         print("That string didn't look like Json." + e.message);
       } on NoSuchMethodError catch (e) {
         print('That string was null!' + e.stackTrace.toString());
-      }    
+      } 
   }
   void errorHandler(Object error, StackTrace trace){
     print(error);
