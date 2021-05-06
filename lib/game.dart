@@ -190,7 +190,7 @@ class _Game extends State<Game> {
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                              ),
+                              ),                              
                             ),
                           ],
                         )

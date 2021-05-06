@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/services.dart';
 import 'avatarIndex.dart';
 
 import 'createroom.dart';
@@ -36,7 +37,7 @@ class _ImageAvatar extends State<HomeScreen> {
     usernameController.value = usernameController.value.copyWith(
       text: text,
       selection: TextSelection(baseOffset: text.length, extentOffset: text.length),
-      composing: TextRange.empty,
+      //composing: TextRange.empty,
     );
   });
 }
@@ -274,6 +275,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                           Expanded(
                                             flex: 2,
                                             child: TextField(
+                              
                                               textCapitalization: TextCapitalization.none,
                                               autocorrect: false,
                                               controller: usernameController,
