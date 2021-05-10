@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:bordered_text/bordered_text.dart';
+//import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hangman_multiplayer/chatbox.dart';
 import 'package:hangman_multiplayer/customProgressBar.dart';
 import 'package:hangman_multiplayer/hangman_client.dart';
-import 'package:lottie/lottie.dart';
+import 'package:hangman_multiplayer/starting_game.dart';
+import 'package:hangman_multiplayer/waiting_status.dart';
+//import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'avatarIndex.dart';
 import 'exitDialog.dart';
@@ -47,6 +49,7 @@ class _Game extends State<Game> {
   dynamic _parsed;
   var matchId;
   var playerId;
+  
    dynamic get parsedP {
     return _parsed;
   }
@@ -143,7 +146,6 @@ class _Game extends State<Game> {
   }
   @override
   Widget build(BuildContext context) {
-    //audioCache.loop('music/hangman-music.mp3');
     return WillPopScope(
     onWillPop: () async => false ,
     child: ChangeNotifierProvider(
@@ -156,78 +158,18 @@ class _Game extends State<Game> {
             Expanded(
               flex: 12,
               child: Container(
-                color:Colors.white,
-                child: Center(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              flex:2,
-                              child:Container(
-                                
-                              )
-                            ),
-                            Expanded(
-                              child: BorderedText(
-                                strokeWidth: 3,
-                                strokeColor: Colors.grey[900],
-                                child: Text(
-                                  'WAITING',
-                                  style: TextStyle(
-                                    fontFamily: 'NunitoBold',
-                                    fontSize: 20,
-                                    color: Colors.yellow[700],
-                                    shadows: <Shadow>[
-                                      Shadow(
-                                        color: Colors.black,
-                                        offset: Offset(3,2),
-                                        blurRadius: 3
-                                      )
-                                    ]
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),                              
-                            ),
-                          ],
-                        )
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Lottie.asset(
-                          'assets/animations/waiting_pigeon.json',
-                          width: 400,
-                          height: 200
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child:Text(
-                                'WAITING FOR PLAYERS',
-                                style: TextStyle(
-                                  fontFamily: 'NunitoBold',
-                                  fontSize:14,
-                                  color: Colors.blueGrey[600]
-                                ),
-                              )
-                            ),
-                            Expanded(
-                              flex:2,
-                              child:Container(
-                                
-                              )
-                            ),
-                          ],
-                        )
-                      ),
-                    ],
-                  ),
-                ),
+                child: 
+                (() {
+                  if (parsedP == null || parsedP['status'] == 0) {
+                    return waitingStatus();
+                  } 
+                  else if(parsedP['status'] == 1){
+                    return starting_game();
+                  }
+                  else{
+                    return InformationDialog(21313, 'dropdownValue2', 'roomCode');
+                  }
+                }())
               ),
             ),
             Expanded(
@@ -414,17 +356,13 @@ class _Game extends State<Game> {
                                                 if (playing == true){
                                                   setState(() {
                                                     playing = false; 
-                                                    musicplayer.fixedPlayer.pause();
-                                                    //audioCache.loop('music/hangman-music.mp3');              
+                                                    musicplayer.fixedPlayer.pause();            
                                                   });
                                                 }
                                                 else{
                                                   setState(() {
                                                     playing = true; 
-                                                    musicplayer.play('music/HangmanMusicMix.mp3');
-                                                    //audioCache.loop('music/hangman-music.mp3',mode: PlayerMode.LOW_LATENCY); 
-                                                    //audioCache.fixedPlayer.stop();    
-                                                                                                 
+                                                    musicplayer.play('music/HangmanMusicMix.mp3');          
                                                   });
                                                 }
                                               },
