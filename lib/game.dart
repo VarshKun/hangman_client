@@ -12,6 +12,7 @@ import 'package:hangman_multiplayer/waiting_status.dart';
 import 'package:provider/provider.dart';
 import 'avatarIndex.dart';
 import 'exitDialog.dart';
+import 'hangman_words.dart';
 import 'informationDialog.dart';
 import 'package:audioplayers/audio_cache.dart';
 
@@ -49,7 +50,8 @@ class _Game extends State<Game> {
   dynamic _parsed;
   var matchId;
   var playerId;
-  
+  dynamic wordlist;
+
    dynamic get parsedP {
     return _parsed;
   }
@@ -125,6 +127,9 @@ class _Game extends State<Game> {
           }); 
           pointsToWin = parsedP["maxscore"].toString();
           _category =  parsedP["category"];
+          wordlist = parsedP["wordlist"].toString();
+          // ignore: unnecessary_statements
+          print('Value: $wordlist');
           Future.delayed(const Duration(milliseconds: 1500), () {
             tcpSend(matchStatusHandler, errorHandler,"matchstatus/$matchId");  
           });
@@ -164,7 +169,7 @@ class _Game extends State<Game> {
                     return waitingStatus();
                   } 
                   else if(parsedP['status'] == 1){
-                    return starting_game();
+                    return starting_game(wordlist);
                   }
                   else{
                     return InformationDialog(21313, 'dropdownValue2', 'roomCode');

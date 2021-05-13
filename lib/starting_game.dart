@@ -3,18 +3,25 @@ import 'package:flutter/material.dart';
 
 // ignore: camel_case_types
 class starting_game extends StatefulWidget {
+  final dynamic wordList;
+  starting_game(this.wordList);
   
+
   @override
-  State createState() => new _starting_game();
+  State createState() => new _starting_game(wordList);
 }
 
 
 // ignore: camel_case_types
 class _starting_game extends State<starting_game > {
+  final dynamic _wordList;
+  _starting_game(this._wordList);
+
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   color: Colors.white,
+    print ('wordlist: $_wordList');
+    return Container(
+      color: Colors.white,
     //     child: Center(
     //       child: Column(
     //         children: [
@@ -86,7 +93,7 @@ class _starting_game extends State<starting_game > {
     //         ],
     //       ),
     //     ),
-    //   );
+    );
       
   }
 }
