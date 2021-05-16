@@ -12,7 +12,6 @@ import 'package:hangman_multiplayer/waiting_status.dart';
 import 'package:provider/provider.dart';
 import 'avatarIndex.dart';
 import 'exitDialog.dart';
-import 'hangman_words.dart';
 import 'informationDialog.dart';
 import 'package:audioplayers/audio_cache.dart';
 
@@ -30,6 +29,7 @@ class Game extends StatefulWidget {
   //String _playerId;
   String matchStatus;
   var parsed; 
+
  
   //Text username = Text(usernameController.toString());
   Game(this._category, this.pointsToWin, this.createGameResponse, this.avatarIndex, this._username, this.playerId,this.matchId);
@@ -50,7 +50,7 @@ class _Game extends State<Game> {
   dynamic _parsed;
   var matchId;
   var playerId;
-  dynamic wordlist;
+  List<String> wordlist;
 
    dynamic get parsedP {
     return _parsed;
@@ -127,7 +127,8 @@ class _Game extends State<Game> {
           }); 
           pointsToWin = parsedP["maxscore"].toString();
           _category =  parsedP["category"];
-          wordlist = parsedP["wordlist"].toString();
+          var tempWordList = parsedP["wordlist"] as List;
+          wordlist = tempWordList.map((word) => word as String).toList();
           // ignore: unnecessary_statements
           print('Value: $wordlist');
           Future.delayed(const Duration(milliseconds: 1500), () {

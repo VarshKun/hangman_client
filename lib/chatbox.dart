@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hangman_multiplayer/avatarIndex.dart';
+import 'package:hangman_multiplayer/starting_game.dart';
 
 //const String defaultUserName = "VarshKun";
 
@@ -17,7 +18,8 @@ class Chat extends StatefulWidget {
 
 class ChatWindow extends State<Chat> with TickerProviderStateMixin {
   final List<Msg> _messages = <Msg>[];
-  final TextEditingController _textController = new TextEditingController();
+  // ignore: non_constant_identifier_names
+  static final TextEditingController TextController = new TextEditingController();
   bool _isWriting = false;
   @override
   Widget build(BuildContext ctx) {
@@ -42,6 +44,7 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
 
 
   Widget _buildComposer() {
+
     return new IconTheme(
         data: new IconThemeData(color: Color.fromRGBO(10, 94, 251, 0.8)),//Theme.of(context).accentColor),
         child: new Container(
@@ -50,30 +53,37 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
             children: <Widget>[
               new Flexible(
                   child: new TextField(
-                    controller: _textController,
+                    controller: TextController,
                     onChanged: (String txt) {
                       setState(() {
                         _isWriting = txt.length > 0;
                       });
                     },
+
+
                     decoration:
                       new InputDecoration.collapsed(hintText: "Enter letter here"),
                   ),
               ),
               new Container(
-                
+                //starting_game.currentinstance.submitGuess(),
                 margin: new EdgeInsets.symmetric(horizontal: 3.0),
                 child: Theme.of(context).platform == TargetPlatform.iOS
                   ? new CupertinoButton(
                     child: new Text("Submit"),
-                    onPressed: _isWriting ? () => _submitMsg(_textController.text,widget.avatarIndex,widget.username)
+                    onPressed: _isWriting ? () =>{
+                      _submitMsg(TextController.text,widget.avatarIndex,widget.username),
+                      
+                    } 
                         : null
                 )
                     : new IconButton(
                     icon: new Icon(Icons.message),
-                    onPressed: _isWriting
-                      ? () => _submitMsg(_textController.text,widget.avatarIndex,widget.username)
-                        : null,
+                    onPressed: _isWriting ? () =>{
+                      _submitMsg(TextController.text,widget.avatarIndex,widget.username),
+                      starting_game.currentinstance.submitGuess(),
+                    } 
+                        : null
                 )
               ),
             ],
@@ -89,7 +99,7 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
 
   _submitMsg(String txt, int avatarIndex, String username) {
     if(txt != null && txt != ""){
-      _textController.clear();
+      TextController.clear();
       setState(() {
         _isWriting = false;
       });
@@ -107,6 +117,8 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
       });
       msg.animationController.forward();
     }
+    // if (starting_game.currentinstance != null)
+    //   starting_game.currentinstance.submitGuess();
   }
   @override
   void dispose() {
@@ -119,7 +131,7 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
 
 // ignore: must_be_immutable
 class Msg extends StatelessWidget {
-  
+
   Msg({this.txt, this.animationController, this.avatarIndex, this.username});
   final String txt;
   final AnimationController animationController;
@@ -142,10 +154,10 @@ class Msg extends StatelessWidget {
               child: new CircleAvatar(child: Image.asset(AvatarIndices.imgPaths.elementAt(avatarIndex)),
                 // style: TextStyle(
                 //   fontFamily: 'NunitoExtraLight'
-                  
+
                 // ),
               )),
-            
+
             new Expanded(
               child: new Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
