@@ -54,14 +54,18 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
               new Flexible(
                   child: new TextField(
                     controller: TextController,
-                    onChanged: (String txt) => {
-                      starting_game.currentinstance.submitGuess(),
+                    onChanged:(String txt) => {
+                      ChatWindow.TextController.text = txt,
                       setState(() {                        
                         _isWriting = txt.length > 0;
-                      })
+                      })                      
                     },
-
-
+                    onSubmitted: (String txt) => {
+                      _submitMsg(TextController.text,widget.avatarIndex,widget.username),
+                      _isWriting = false,
+                      ChatWindow.TextController.text = txt,
+                      starting_game.currentinstance.submitGuess()
+                    },
                     decoration:
                       new InputDecoration.collapsed(hintText: "Enter letter here"),
                   ),
@@ -81,8 +85,8 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
                     : new IconButton(
                     icon: new Icon(Icons.message),
                     onPressed: _isWriting ? () =>{
-                      _submitMsg(TextController.text,widget.avatarIndex,widget.username),
-                      //starting_game.currentinstance.submitGuess(),
+                      starting_game.currentinstance.submitGuess(),
+                      _submitMsg(TextController.text,widget.avatarIndex,widget.username)
                     } 
                         : null
                 )

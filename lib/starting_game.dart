@@ -75,18 +75,18 @@ class _starting_game extends State<starting_game > {
   // ignore: missing_return
   Future<Null> submitGuess(){
     if(doomsdayClock > 0){
-      String guess = ChatWindow.TextController.text.toLowerCase();
-      if(guess.length == 1){
-        if(!wordCurrently(charsToFind, wordToFind).contains(guess)){
-          print(guess);
-          if(!charsUsedBad.contains(guess)){
+      String strGuessTyped = ChatWindow.TextController.text.toLowerCase();
+      if(strGuessTyped.length == 1){
+        if(!wordCurrently(charsToFind, wordToFind).contains(strGuessTyped)){
+          print(strGuessTyped);
+          if(!charsUsedBad.contains(strGuessTyped)){
             print("used:" + charsUsedBad.toString());
-            if(checkForChar(guess)){
-              charsToFind.remove(guess);
+            if(checkForChar(strGuessTyped)){
+              charsToFind.remove(strGuessTyped);
             }
             else{
               doomsdayClock -= 1;
-              charsUsedBad.add(guess);
+              charsUsedBad.add(strGuessTyped);
               print("Wrong! Remaining guesses:" + doomsdayClock.toString());
             }
           }
