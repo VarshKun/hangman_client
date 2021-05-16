@@ -45,8 +45,8 @@ class _starting_game extends State<starting_game > {
                 child: Text(
                   hiddenWordToGuess,
                   style: TextStyle(
-                    letterSpacing: 20,
-                    fontSize: 35,
+                    letterSpacing: 15,
+                    fontSize: 20,
                     //decoration: TextDecoration.underline 
                   ),
                 ),
@@ -56,7 +56,7 @@ class _starting_game extends State<starting_game > {
             Expanded(
               child: Text(((){
                 if (won == true){
-                  return "YOU WON";
+                  return "NEXT ROUND LOADING...";
                 }
                 else{
                   return "No of guesses remaining: " + doomsdayClock.toString();
@@ -94,14 +94,20 @@ class _starting_game extends State<starting_game > {
             print(wordCurrently(charsToFind, wordToFind));
             won = true;
             print ("You made it");
-            // Future.delayed(const Duration(seconds: 6), () {
-            //   wordcounter ++;
-            //   newGame();
-            // });
+            startNewWord = true;
+            Future.delayed(const Duration(seconds: 3), () {
+              wordcounter ++;
+              won = false;
+              newGame();
+            });
           }
           if (doomsdayClock <= 0){
             print ("You died");
-
+            startNewWord = true;
+            Future.delayed(const Duration(seconds: 3), () {
+              wordcounter ++;
+              newGame();
+            });
           }
           print(wordCurrently(charsToFind, wordToFind));
           setWordShow();
