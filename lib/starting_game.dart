@@ -30,6 +30,7 @@ class _starting_game extends State<starting_game > {
   @override
   Widget build(BuildContext context) {
     if (startNewWord){
+      startNewWord = false;
       wordToFind = words[wordcounter];
       newGame();
     }

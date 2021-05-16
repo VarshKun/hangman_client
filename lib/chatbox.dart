@@ -54,10 +54,11 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
               new Flexible(
                   child: new TextField(
                     controller: TextController,
-                    onChanged: (String txt) {
-                      setState(() {
+                    onChanged: (String txt) => {
+                      starting_game.currentinstance.submitGuess(),
+                      setState(() {                        
                         _isWriting = txt.length > 0;
-                      });
+                      })
                     },
 
 
@@ -81,7 +82,7 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
                     icon: new Icon(Icons.message),
                     onPressed: _isWriting ? () =>{
                       _submitMsg(TextController.text,widget.avatarIndex,widget.username),
-                      starting_game.currentinstance.submitGuess(),
+                      //starting_game.currentinstance.submitGuess(),
                     } 
                         : null
                 )
