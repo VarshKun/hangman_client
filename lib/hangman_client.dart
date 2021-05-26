@@ -16,7 +16,7 @@ import 'dart:typed_data';
       onDone: doneHandler, 
       cancelOnError: false);
    }).catchError((Object e) {
-      print("Unable to connect: $e");
+      print("Unable to connect: $e"); 
    });
   }  
   

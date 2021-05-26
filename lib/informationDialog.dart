@@ -2,31 +2,29 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:hangman_multiplayer/category.dart';
-class _InformationDialog extends State<InformationDialog>{
+
+class _InformationDialog extends State<InformationDialog> {
   final int _category;
   final String dropdownValue2;
   final String roomCode;
-  _InformationDialog(this._category,this.dropdownValue2,this.roomCode);
+  _InformationDialog(this._category, this.dropdownValue2, this.roomCode);
 
-  
-  dialogContent(BuildContext context){
+  dialogContent(BuildContext context) {
     return Container(
-      
-      decoration:new BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 10.0,
-            offset: const Offset(0.0, 10.0),
-          ),
-        ]
-      ),
+      decoration: new BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 10.0,
+              offset: const Offset(0.0, 10.0),
+            ),
+          ]),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children:<Widget> [
+        children: <Widget>[
           Align(
             alignment: Alignment.topRight,
             child: IconButton(
@@ -34,7 +32,7 @@ class _InformationDialog extends State<InformationDialog>{
               splashRadius: 2,
               icon: Icon(Icons.cancel),
               iconSize: 30,
-              onPressed: (){
+              onPressed: () {
                 Navigator.pop(context);
               },
             ),
@@ -45,74 +43,53 @@ class _InformationDialog extends State<InformationDialog>{
             child: Text(
               'INFO',
               style: TextStyle(
-                fontFamily: 'NunitoBold',
-                fontSize: 20,
-                color: Colors.yellow[700],
-                shadows: <Shadow>[
-                  Shadow(
-                    color: Colors.black,
-                    offset: Offset(3,2),
-                    blurRadius: 3
-                  )
-                ]
-              ),
+                  fontFamily: 'NunitoBold',
+                  fontSize: 20,
+                  color: Colors.yellow[700],
+                  shadows: <Shadow>[
+                    Shadow(
+                        color: Colors.black,
+                        offset: Offset(3, 2),
+                        blurRadius: 3)
+                  ]),
               textAlign: TextAlign.center,
             ),
           ),
-          
-          Lottie.asset(
-            'assets/animations/setting.json',
-            width: 200,
-            height: 200
-          ),
-       
+          Lottie.asset('assets/animations/setting.json',
+              width: 200, height: 200),
           Row(
             children: [
               Expanded(
-                flex: 5,
-                child: Text(
-                  "THEME:",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'NunitoBold',
-                    fontSize: 16,
-                    color: Colors.blue
-                  ),
-                )
-                
-                
-              ),
-              
+                  flex: 5,
+                  child: Text(
+                    "THEME:",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'NunitoBold',
+                        fontSize: 16,
+                        color: Colors.blue),
+                  )),
               Expanded(
-                flex: 5,
-                child: Text(
-                  "GOAL:",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'NunitoBold',
-                    fontSize: 16,
-                    color: Colors.blue
-                  ),
-                )
-              ),
+                  flex: 5,
+                  child: Text(
+                    "GOAL:",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'NunitoBold',
+                        fontSize: 16,
+                        color: Colors.blue),
+                  )),
               Expanded(
-                flex: 5,
-                child: Text(
-                  "ROOM CODE:",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'NunitoBold',
-                    fontSize: 13,
-                    color: Colors.blue
-                  ),
-                )
-              ),
-              Expanded(
-                flex:1,
-                child: Container(
-
-                )
-              ),
+                  flex: 5,
+                  child: Text(
+                    "ROOM CODE:",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'NunitoBold',
+                        fontSize: 13,
+                        color: Colors.blue),
+                  )),
+              Expanded(flex: 1, child: Container()),
             ],
           ),
           Row(
@@ -122,42 +99,39 @@ class _InformationDialog extends State<InformationDialog>{
                   Category.categoryNames.elementAt(_category),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'NunitoBold',
-                    fontSize: 15,
-                    color: Colors.black54
-                  ),
+                      fontFamily: 'NunitoBold',
+                      fontSize: 15,
+                      color: Colors.black54),
                 ),
               ),
-              
               Expanded(
-                child: Text(
-                  "$dropdownValue2",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+                  child: Text(
+                "$dropdownValue2",
+                textAlign: TextAlign.center,
+                style: TextStyle(
                     fontFamily: 'NunitoBold',
-                    fontSize:15,
-                    color: Colors.black54
-                  ),
-                )
-              ),
+                    fontSize: 15,
+                    color: Colors.black54),
+              )),
               Expanded(
-                child: Text(
-                  "$roomCode",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+                  child: Text(
+                "$roomCode",
+                textAlign: TextAlign.center,
+                style: TextStyle(
                     fontFamily: 'NunitoBold',
-                    fontSize:15,
-                    color: Colors.black54
-                  ),
-                )
-              ),
+                    fontSize: 15,
+                    color: Colors.black54),
+              )),
             ],
           ),
-          SizedBox(height: 30,)
+          SizedBox(
+            height: 30,
+          )
         ],
       ),
     );
   }
+
   // @override
   // _CustomDialog createState() => _CustomDialog();
   @override
@@ -172,13 +146,14 @@ class _InformationDialog extends State<InformationDialog>{
     );
   }
 }
+
 class InformationDialog extends StatefulWidget {
   final int _category;
   final String dropdownValue2;
   final String roomCode;
-  InformationDialog(this._category, this.dropdownValue2,this.roomCode);
-
+  InformationDialog(this._category, this.dropdownValue2, this.roomCode);
 
   @override
-  _InformationDialog createState() => _InformationDialog(_category,dropdownValue2,roomCode);
+  _InformationDialog createState() =>
+      _InformationDialog(_category, dropdownValue2, roomCode);
 }
