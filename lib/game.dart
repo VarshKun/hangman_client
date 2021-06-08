@@ -166,7 +166,7 @@ class _Game extends State<Game> {
                   if (parsedP == null || parsedP['status'] == 0) {
                     return waitingStatus();
                   } else if (parsedP['status'] == 1) {
-                    return starting_game(wordlist);
+                    return starting_game(wordlist,pointsToWin);
                   } else {
                     return InformationDialog(
                         21313, 'dropdownValue2', 'roomCode');
