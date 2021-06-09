@@ -34,7 +34,7 @@ class Game extends StatefulWidget {
 
   @override
   _Game createState() => _Game(this._category, this.pointsToWin, _username,
-      parsed, this.createGameResponse, this.avatarIndex, this.matchId);
+      parsed, this.createGameResponse, this.avatarIndex, this.matchId,this.playerId);
 }
 
 class _Game extends State<Game> {
@@ -62,13 +62,13 @@ class _Game extends State<Game> {
   }
 
   _Game(this._category, this.pointsToWin, this.username, parsed,
-      String createGameResponse, this.avatarIndex, this.matchId) {
+      String createGameResponse, this.avatarIndex, this.matchId, this.playerId) {
     if (playing) {
       musicplayer.loop('music/HangmanMusicMix.mp3');
     } else {
       musicplayer.fixedPlayer.pause();
     }
-    if (_category != null) {
+    if (_category != null) { //if create game
       try {
         final parsed = json.decode(createGameResponse);
         this.matchId = parsed['matchId'];
@@ -300,12 +300,7 @@ class _Game extends State<Game> {
                                                             Expanded(
                                                               flex: 2,
                                                               child: Text(
-                                                                parsedP["players"]
-                                                                        .values
-                                                                        .elementAt(
-                                                                            index)["score"]
-                                                                        .toString() +
-                                                                    " points",
+                                                                parsedP["players"].values.elementAt(index)["score"].toString() +" points",
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,

@@ -50,8 +50,6 @@ class _starting_game extends State<starting_game> {
       final parsed = json.decode(_data);
       if (parsed['error'] != null) {
         print(parsed['error']);
-      } else {
-        print("Unknown error");
       }
     } on FormatException catch (e) {
       print("That string didn't look like Json." + e.message);
