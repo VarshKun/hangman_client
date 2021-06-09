@@ -94,8 +94,8 @@ class _Game extends State<Game> {
     String _data = new String.fromCharCodes(data).trim();
     try {
       final parsed = json.decode(_data);
-      if (parsed['playerId'] != null) {
-        this.playerId = parsed['playerId'];
+      if (parsed['playerid'] != null) {
+        this.playerId = parsed['playerid'];
       } else if (parsed['error'] != null) {
         print(parsed['error']);
       } else {
@@ -166,7 +166,7 @@ class _Game extends State<Game> {
                   if (parsedP == null || parsedP['status'] == 0) {
                     return waitingStatus();
                   } else if (parsedP['status'] == 1) {
-                    return starting_game(wordlist,pointsToWin);
+                    return starting_game(wordlist, pointsToWin, matchId,playerId);
                   } else {
                     return InformationDialog(
                         21313, 'dropdownValue2', 'roomCode');

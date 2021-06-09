@@ -28,7 +28,7 @@ class _ImageAvatar extends State<HomeScreen> {
   }
 
   void initState() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    //SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
     usernameController.addListener(() {
       final text = usernameController.text.toString();
@@ -170,7 +170,9 @@ class _ImageAvatar extends State<HomeScreen> {
                                                   setState(() {
                                                     if (avatarIndex == 0) {
                                                       avatarIndex =
-                                                          AvatarIndices.imgPaths.length -  1;
+                                                          AvatarIndices.imgPaths
+                                                                  .length -
+                                                              1;
                                                     } else {
                                                       avatarIndex -= 1;
                                                     }
@@ -195,9 +197,9 @@ class _ImageAvatar extends State<HomeScreen> {
                                           radius: 62,
                                           child: CircleAvatar(
                                             radius: 60,
-                                            child: Image.asset(
-                                              AvatarIndices.imgPaths.elementAt(avatarIndex)
-                                            ),
+                                            child: Image.asset(AvatarIndices
+                                                .imgPaths
+                                                .elementAt(avatarIndex)),
                                             backgroundColor: Colors.transparent,
                                           ),
                                         ),
@@ -214,7 +216,10 @@ class _ImageAvatar extends State<HomeScreen> {
                                                 heroTag: null,
                                                 onPressed: () {
                                                   setState(() {
-                                                    if ((AvatarIndices.imgPaths.length -1) ==avatarIndex)
+                                                    if ((AvatarIndices.imgPaths
+                                                                .length -
+                                                            1) ==
+                                                        avatarIndex)
                                                       avatarIndex = 0;
                                                     else
                                                       avatarIndex += 1;
@@ -321,7 +326,9 @@ class _ImageAvatar extends State<HomeScreen> {
                                             child: ElevatedButton(
                                               style: ButtonStyle(
                                                   backgroundColor:
-                                                      MaterialStateProperty.all<Color>(Colors.lightBlueAccent)),
+                                                      MaterialStateProperty
+                                                          .all<Color>(Colors
+                                                              .lightBlueAccent)),
                                               // color: Colors.lightBlueAccent,
                                               // textColor: Colors.white,
                                               onPressed: () {
@@ -331,13 +338,12 @@ class _ImageAvatar extends State<HomeScreen> {
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                      builder: (context) =>
-                                                        JoinRoom(
-                                                          avatarIndex,
-                                                          usernameController
-                                                              .text,
-                                                        )
-                                                    ),
+                                                        builder: (context) =>
+                                                            JoinRoom(
+                                                              avatarIndex,
+                                                              usernameController
+                                                                  .text,
+                                                            )),
                                                   );
                                                 }
                                               },
@@ -391,12 +397,11 @@ class _ImageAvatar extends State<HomeScreen> {
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                      builder: (context) =>
-                                                        CreateRoom(
-                                                          avatarIndex,
-                                                          usernameController.text
-                                                        )
-                                                    ),
+                                                        builder: (context) =>
+                                                            CreateRoom(
+                                                                avatarIndex,
+                                                                usernameController
+                                                                    .text)),
                                                   );
                                                 }
                                               },
@@ -407,8 +412,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                                   style: TextStyle(
                                                       fontFamily:
                                                           'PumpkinCheesecake',
-                                                      fontSize: 35
-                                                  ),
+                                                      fontSize: 35),
                                                 ),
                                               ),
                                             ),

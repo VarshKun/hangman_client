@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hangman_multiplayer/chatbox.dart';
+
+import 'hangman_client.dart';
 
 String wordToFind;
 int wordcounter = 0;
@@ -17,19 +21,43 @@ int totalScore = 0;
 class starting_game extends StatefulWidget {
   final List<String> words;
   final String pointsToWin;
-  starting_game(this.words, this.pointsToWin);
+  final String matchId;
+  final String playerId;
+  starting_game(this.words, this.pointsToWin, this.matchId, this.playerId);
   static _starting_game currentinstance;
   @override
-  State createState() => new _starting_game(words, pointsToWin);
+  State createState() =>
+      new _starting_game(words, pointsToWin, matchId, playerId);
 }
 
 // ignore: camel_case_types
 class _starting_game extends State<starting_game> {
   final List<String> words;
   String pointsToWin;
-
-  _starting_game(this.words, this.pointsToWin) {
+  String matchId;
+  String playerId;
+  _starting_game(this.words, this.pointsToWin, this.matchId, this.playerId) {
     starting_game.currentinstance = this;
+  }
+
+  void errorHandler(Object error, StackTrace trace) {
+    print(error);
+  }
+
+  void updateScoreHandler(data) {
+    String _data = new String.fromCharCodes(data).trim();
+    try {
+      final parsed = json.decode(_data);
+      if (parsed['error'] != null) {
+        print(parsed['error']);
+      } else {
+        print("Unknown error");
+      }
+    } on FormatException catch (e) {
+      print("That string didn't look like Json." + e.message);
+    } on NoSuchMethodError catch (e) {
+      print('That string was null!' + e.stackTrace.toString());
+    }
   }
 
   @override
@@ -46,11 +74,12 @@ class _starting_game extends State<starting_game> {
           children: [
             //Expanded(child: Container(color: Colors.cyan,)),
             Expanded(
+              flex: 1,
               child: Center(
                 child: Text(
                   hiddenWordToGuess,
                   style: TextStyle(
-                    letterSpacing: 15,
+                    letterSpacing: 10,
                     fontSize: 20,
                     //decoration: TextDecoration.underline
                   ),
@@ -87,6 +116,14 @@ class _starting_game extends State<starting_game> {
               charsToFind.remove(strGuessTyped);
               totalScore = totalScore + 2;
               print(totalScore);
+              try {
+                tcpSend(updateScoreHandler, errorHandler,
+                    "updatescore/$matchId/$playerId/$totalScore");
+              } on FormatException catch (e) {
+                print("That string didn't look like Json." + e.message);
+              } on NoSuchMethodError catch (e) {
+                print('That string was null!' + e.stackTrace.toString());
+              }
             } else {
               doomsdayClock -= 1;
               charsUsedBad.add(strGuessTyped);
