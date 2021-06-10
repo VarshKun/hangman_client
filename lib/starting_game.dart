@@ -38,7 +38,23 @@ class _starting_game extends State<starting_game> {
   String playerId;
   _starting_game(this.words, this.pointsToWin, this.matchId, this.playerId) {
     starting_game.currentinstance = this;
-    //wordToFind = words[wordcounter];
+    totalScore = 0;
+    won = false;
+    charsToFind = [];
+    startNewWord = false;
+    wordcounter = 0;
+    wordToFind = words[wordcounter];
+    charsUsedBad = [];
+    charsUsedBad.clear();
+    doomsdayClock = 7;
+    charsToFind = [];
+    for (int i = 0; wordToFind.length > i; i++) {
+      if (!charsToFind.contains(wordToFind.split("")[i].toLowerCase()) &&
+          wordToFind.split("")[i] != " ") {
+        charsToFind.add(wordToFind.split("")[i].toLowerCase());
+      }
+    }
+    hiddenWordToGuess = wordCurrently(charsToFind, wordToFind);
   }
 
   void errorHandler(Object error, StackTrace trace) {
@@ -46,7 +62,7 @@ class _starting_game extends State<starting_game> {
   }
 
   void updateScoreHandler(data) {
-    String _data = new String.fromCharCodes(data).trim();
+    String _data  = new String.fromCharCodes(data).trim();
     try {
       final parsed = json.decode(_data);
       if (parsed['error'] != null) {
