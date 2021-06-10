@@ -393,7 +393,7 @@ class _ImageAvatar extends State<HomeScreen> {
                                               onPressed: () {
                                                 validateTextField(
                                                     usernameController.text);
-                                                if (userNameValidate != true) {
+                                                if (!userNameValidate) {
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(

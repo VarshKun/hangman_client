@@ -12,10 +12,13 @@ import 'hangman_client.dart';
 int _category = 0;
 int _avatarIndex = 0;
 String _username;
-class CreateRoom extends StatefulWidget {
-  CreateRoom(int avatarIndex, String username){_avatarIndex = avatarIndex;_username = username;}
 
-  
+class CreateRoom extends StatefulWidget {
+  CreateRoom(int avatarIndex, String username) {
+    _avatarIndex = avatarIndex;
+    _username = username;
+  }
+
   @override
   _CreateRoom createState() => _CreateRoom();
 }
@@ -27,40 +30,30 @@ class _CreateRoom extends State<CreateRoom> {
   bool _isLoading = false;
   String dataRecv = "";
 
-  Future<String> showOverlay() {
+  Future<String> showOverlay() async {
     setState(() {
       _isLoading = true;
     });
 
-    tcpSend(dataHandler, errorHandler, "newmatch/$_category/$dropdownValue1/$pointsToWin");
-    
-    return Future.delayed(
-      Duration(seconds: 30),
-      () => dataRecv,
-    );
+    dataRecv = await tcpSendV2(
+        errorHandler, "newmatch/$_category/$dropdownValue1/$pointsToWin");
+    return dataRecv;
   }
 
-  void dataHandler(data){
-    dataRecv = new String.fromCharCodes(data).trim();
-    /*setState(() {
-        _isLoading = false;
-      });*/
-  }
-
-  void errorHandler(Object error, StackTrace trace){
+  void errorHandler(Object error, StackTrace trace) {
     setState(() {
-        _isLoading = false;
-      });
+      _isLoading = false;
+    });
     print(error);
   }
-    
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.blue,
       body: WillPopScope(
-        onWillPop: ()  async => false,
+        onWillPop: () async => false,
         child: LoadingOverlay(
           child: Column(
             children: [
@@ -78,71 +71,67 @@ class _CreateRoom extends State<CreateRoom> {
                               children: [
                                 Expanded(
                                   flex: 1,
-                                  child: Container
-                                  (
-                                    
-                                  ),
+                                  child: Container(),
                                 ),
                                 Expanded(
                                   flex: 2,
-                                  child: Row
-                                  (
+                                  child: Row(
                                     children: [
                                       Expanded(
-                                        flex: 1,
-                                        child: Column(children: [
-                                          Expanded(
-                                            flex: 3,
-                                            child: Row(
-                                              children: [
-                                                
-                                                Expanded(
-                                                  flex: 3,
-                                                  child: IconButton(
-                                                    icon: Icon(Icons.arrow_back_rounded),
-                                                    onPressed: (){
-                                                      Navigator.pop(context);
-                                                      //Navigator.push(context, MaterialPageRoute(builder:(context) => HomeScreen() ));
-                                                    },
-                                                    color: Colors.yellow[700],
-                                                    iconSize: 35
-                                                  ),
+                                          flex: 1,
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                flex: 3,
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 3,
+                                                      child: IconButton(
+                                                          icon: Icon(Icons
+                                                              .arrow_back_rounded),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            //Navigator.push(context, MaterialPageRoute(builder:(context) => HomeScreen() ));
+                                                          },
+                                                          color: Colors
+                                                              .yellow[700],
+                                                          iconSize: 35),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: Container(),
+                                                    ),
+                                                  ],
                                                 ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: Container(
-                                                    
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            
-                                          ),
-                                          Expanded(
-                                            flex: 3,
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: Center(
-                                                    child: Text(
-                                                      'BACK',
-                                                      style: TextStyle(
-                                                        fontFamily: 'PumpkinCheesecake',
-                                                        fontSize: 30,
-                                                        color: Colors.yellow[700]
+                                              ),
+                                              Expanded(
+                                                flex: 3,
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: Center(
+                                                        child: Text(
+                                                          'BACK',
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'PumpkinCheesecake',
+                                                              fontSize: 30,
+                                                              color: Colors
+                                                                  .yellow[700]),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
+                                                    Expanded(
+                                                      child: Container(),
+                                                    ),
+                                                  ],
                                                 ),
-                                                Expanded(
-                                                  child: Container(),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],)
-                                      ),
+                                              ),
+                                            ],
+                                          )),
                                       Expanded(
                                         flex: 2,
                                         child: BorderedText(
@@ -151,42 +140,33 @@ class _CreateRoom extends State<CreateRoom> {
                                           child: Text(
                                             'SETUP',
                                             style: TextStyle(
-                                              fontFamily: 'NunitoBold',
-                                              fontSize: 40,
-                                              color: Colors.yellow[700],
-                                              shadows: <Shadow>[
-                                               Shadow(
-                                                 color: Colors.black,
-                                                 offset: Offset(3,2),
-                                                 blurRadius: 3
-                                               )
-                                              ]
-                                            ),
+                                                fontFamily: 'NunitoBold',
+                                                fontSize: 40,
+                                                color: Colors.yellow[700],
+                                                shadows: <Shadow>[
+                                                  Shadow(
+                                                      color: Colors.black,
+                                                      offset: Offset(3, 2),
+                                                      blurRadius: 3)
+                                                ]),
                                             textAlign: TextAlign.center,
                                           ),
                                         ),
                                       ),
                                       Expanded(
                                         flex: 1,
-                                        child: Container
-                                        (
-                                          
-                                        ),
+                                        child: Container(),
                                       ),
                                     ],
                                   ),
                                 ),
                                 Expanded(
                                   flex: 1,
-                                  child: Container
-                                  (
-                                    
-                                  ),
+                                  child: Container(),
                                 ),
                               ],
                             ),
                           ),
-                          
                         ],
                       ),
                     ),
@@ -216,36 +196,29 @@ class _CreateRoom extends State<CreateRoom> {
                                               children: [
                                                 Expanded(
                                                   flex: 2,
-                                                  child: Container(
-                                                    
-                                                  ),
+                                                  child: Container(),
                                                 ),
                                                 Expanded(
                                                   flex: 3,
                                                   child: Row(
                                                     children: [
                                                       Expanded(
-                                                        flex: 2,
-                                                        child: Container(
-                                                         
-                                                        )
-                                                      ),
+                                                          flex: 2,
+                                                          child: Container()),
                                                       Expanded(
                                                         flex: 5,
                                                         child: Text(
                                                           'PLAYERS',
                                                           style: TextStyle(
-                                                            color: Colors.blueGrey,
-                                                            fontFamily: 'NunitoBold'
-                                                          ),
+                                                              color: Colors
+                                                                  .blueGrey,
+                                                              fontFamily:
+                                                                  'NunitoBold'),
                                                         ),
                                                       ),
                                                       Expanded(
-                                                        flex: 2,
-                                                        child: Container(
-                                                         
-                                                        )
-                                                      ),
+                                                          flex: 2,
+                                                          child: Container()),
                                                     ],
                                                   ),
                                                 ),
@@ -255,29 +228,34 @@ class _CreateRoom extends State<CreateRoom> {
                                                     children: [
                                                       Expanded(
                                                         flex: 2,
-                                                        child: Container(
-                                                          
-                                                        ),
+                                                        child: Container(),
                                                       ),
                                                       Expanded(
                                                         flex: 5,
                                                         child: ButtonTheme(
                                                           alignedDropdown: true,
-                                                          child: DropdownButton<String>(
-                                                            
+                                                          child: DropdownButton<
+                                                              String>(
                                                             isExpanded: true,
-                                                            value: dropdownValue1,
+                                                            value:
+                                                                dropdownValue1,
                                                             iconSize: 24,
                                                             elevation: 1,
-                                                            style: TextStyle(color: Colors.black, fontSize: 18),
-                                                            underline: Container(
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 18),
+                                                            underline:
+                                                                Container(
                                                               height: 1,
-                                                              color: Colors.grey,
+                                                              color:
+                                                                  Colors.grey,
                                                             ),
-                                                            onChanged: (String newValue) {
+                                                            onChanged: (String
+                                                                newValue) {
                                                               setState(() {
-                                                                dropdownValue1 = newValue;
-                                                                
+                                                                dropdownValue1 =
+                                                                    newValue;
                                                               });
                                                             },
                                                             items: <String>[
@@ -290,10 +268,15 @@ class _CreateRoom extends State<CreateRoom> {
                                                               '8',
                                                               '9',
                                                               '10'
-                                                            ].map<DropdownMenuItem<String>>((String value) {
-                                                              return DropdownMenuItem<String>(
+                                                            ].map<
+                                                                DropdownMenuItem<
+                                                                    String>>((String
+                                                                value) {
+                                                              return DropdownMenuItem<
+                                                                  String>(
                                                                 value: value,
-                                                                child: Text(value),
+                                                                child:
+                                                                    Text(value),
                                                               );
                                                             }).toList(),
                                                           ),
@@ -301,9 +284,7 @@ class _CreateRoom extends State<CreateRoom> {
                                                       ),
                                                       Expanded(
                                                         flex: 2,
-                                                        child: Container(
-                                                          
-                                                        ),
+                                                        child: Container(),
                                                       ),
                                                     ],
                                                   ),
@@ -316,9 +297,7 @@ class _CreateRoom extends State<CreateRoom> {
                                               children: [
                                                 Expanded(
                                                   flex: 2,
-                                                  child: Container(
-                                                    
-                                                  ),
+                                                  child: Container(),
                                                 ),
                                                 Expanded(
                                                   flex: 3,
@@ -326,25 +305,22 @@ class _CreateRoom extends State<CreateRoom> {
                                                     children: [
                                                       Expanded(
                                                         flex: 2,
-                                                        child: Container(
-                                                          
-                                                        ),
+                                                        child: Container(),
                                                       ),
                                                       Expanded(
                                                         flex: 5,
                                                         child: Text(
                                                           'POINTS',
                                                           style: TextStyle(
-                                                            color: Colors.blueGrey,
-                                                            fontFamily: 'NunitoBold'
-                                                          ),
+                                                              color: Colors
+                                                                  .blueGrey,
+                                                              fontFamily:
+                                                                  'NunitoBold'),
                                                         ),
                                                       ),
                                                       Expanded(
                                                         flex: 2,
-                                                        child: Container(
-                                                          
-                                                        ),
+                                                        child: Container(),
                                                       ),
                                                     ],
                                                   ),
@@ -355,27 +331,33 @@ class _CreateRoom extends State<CreateRoom> {
                                                     children: [
                                                       Expanded(
                                                         flex: 2,
-                                                        child: Container(
-                                                          
-                                                        ),
+                                                        child: Container(),
                                                       ),
                                                       Expanded(
                                                         flex: 5,
                                                         child: ButtonTheme(
                                                           alignedDropdown: true,
-                                                          child: DropdownButton<String>(
+                                                          child: DropdownButton<
+                                                              String>(
                                                             isExpanded: true,
                                                             value: pointsToWin,
                                                             iconSize: 24,
                                                             elevation: 1,
-                                                            style: TextStyle(color: Colors.black, fontSize: 18),
-                                                            underline: Container(
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 18),
+                                                            underline:
+                                                                Container(
                                                               height: 1,
-                                                              color: Colors.grey,
+                                                              color:
+                                                                  Colors.grey,
                                                             ),
-                                                            onChanged: (String newValue) {
+                                                            onChanged: (String
+                                                                newValue) {
                                                               setState(() {
-                                                                pointsToWin = newValue;
+                                                                pointsToWin =
+                                                                    newValue;
                                                               });
                                                             },
                                                             items: <String>[
@@ -386,10 +368,15 @@ class _CreateRoom extends State<CreateRoom> {
                                                               '240',
                                                               '360',
                                                               '480'
-                                                            ].map<DropdownMenuItem<String>>((String value) {
-                                                              return DropdownMenuItem<String>(
+                                                            ].map<
+                                                                DropdownMenuItem<
+                                                                    String>>((String
+                                                                value) {
+                                                              return DropdownMenuItem<
+                                                                  String>(
                                                                 value: value,
-                                                                child: Text(value),
+                                                                child:
+                                                                    Text(value),
                                                               );
                                                             }).toList(),
                                                           ),
@@ -397,9 +384,7 @@ class _CreateRoom extends State<CreateRoom> {
                                                       ),
                                                       Expanded(
                                                         flex: 2,
-                                                        child: Container(
-                                                          
-                                                        ),
+                                                        child: Container(),
                                                       ),
                                                     ],
                                                   ),
@@ -416,9 +401,7 @@ class _CreateRoom extends State<CreateRoom> {
                                         children: [
                                           Expanded(
                                             flex: 2,
-                                            child: Container(
-                                              
-                                            ),
+                                            child: Container(),
                                           ),
                                           Expanded(
                                             flex: 3,
@@ -429,9 +412,9 @@ class _CreateRoom extends State<CreateRoom> {
                                                   child: Text(
                                                     'VISIBLE ROOM',
                                                     style: TextStyle(
-                                                      color: Colors.blueGrey,
-                                                      fontFamily: 'NunitoBold'
-                                                    ),
+                                                        color: Colors.blueGrey,
+                                                        fontFamily:
+                                                            'NunitoBold'),
                                                   ),
                                                 ),
                                                 Expanded(
@@ -440,10 +423,13 @@ class _CreateRoom extends State<CreateRoom> {
                                                     activeColor: Colors.blue,
                                                     activeChild: Text('ON'),
                                                     inactiveChild: Text('OFF'),
-                                                    borderRadius: BorderRadius.circular(5),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
                                                     width: 58,
                                                     value: _value01,
-                                                    onChanged: (value) => setState(() {
+                                                    onChanged: (value) =>
+                                                        setState(() {
                                                       _value01 = value;
                                                     }),
                                                   ),
@@ -453,9 +439,7 @@ class _CreateRoom extends State<CreateRoom> {
                                           ),
                                           Expanded(
                                             flex: 2,
-                                            child: Container(
-                                              
-                                            ),
+                                            child: Container(),
                                           ),
                                         ],
                                       ),
@@ -483,25 +467,19 @@ class _CreateRoom extends State<CreateRoom> {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        
-                      ),
+                      child: Container(),
                     ),
                     Expanded(
                       flex: 35,
                       child: Row(
                         children: [
-                          Expanded(
-                            child: Container(
-                             
-                            )
-                          ),
+                          Expanded(child: Container()),
                           Expanded(
                             flex: 22,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Container(
-                                color: Color.fromRGBO(10,94,251,0.4),
+                                color: Color.fromRGBO(10, 94, 251, 0.4),
                                 child: Column(
                                   children: [
                                     Expanded(
@@ -514,132 +492,132 @@ class _CreateRoom extends State<CreateRoom> {
                                               children: [
                                                 Expanded(
                                                   flex: 3,
-                                                  child: Container(
-                                                    
-                                                  ),
+                                                  child: Container(),
                                                 ),
                                                 Expanded(
                                                   flex: 15,
                                                   child: Text(
                                                     'CHOOSE A THEME ',
                                                     style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontFamily: 'NunitoExtraLight',
-                                                      color: Color.fromRGBO(255,255,255,1),
-                                                      //color: Color.fromRGBO(186,200,232,2),
-                                                      fontWeight: FontWeight.w500 
-                                                    ),
+                                                        fontSize: 18,
+                                                        fontFamily:
+                                                            'NunitoExtraLight',
+                                                        color: Color.fromRGBO(
+                                                            255, 255, 255, 1),
+                                                        //color: Color.fromRGBO(186,200,232,2),
+                                                        fontWeight:
+                                                            FontWeight.w500),
                                                   ),
                                                 ),
                                                 Expanded(
                                                   flex: 5,
-                                                  child: Container(
-                                                    
-                                                  ),
+                                                  child: Container(),
                                                 ),
                                               ],
                                             ),
                                           ),
                                           Expanded(
                                             flex: 2,
-                                            child: Container(
-                                              
-                                            ),
+                                            child: Container(),
                                           ),
-                                          
                                         ],
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 5,
-                                      child: Category(
-                                        onSelectedIndexChanged: (newCategory){
-                                          _category = newCategory;
-                                        },
-                                      )
-                                    ),
+                                        flex: 5,
+                                        child: Category(
+                                          onSelectedIndexChanged:
+                                              (newCategory) {
+                                            _category = newCategory;
+                                          },
+                                        )),
                                     Expanded(
                                       flex: 2,
                                       child: Row(
                                         children: [
                                           Expanded(
-                                            child: Container(
-                                              
-                                            ),
+                                            child: Container(),
                                           ),
                                           Expanded(
                                             flex: 2,
                                             child: Column(
                                               children: [
                                                 Expanded(
-                                                  child: Container(
-                                                    
-                                                  ),
+                                                  child: Container(),
                                                 ),
                                                 Expanded(
                                                   flex: 2,
                                                   //child:WillPopScope(
-                                                    //onWillPop: ()  async => false,
-                                                    child: FloatingActionButton.extended(
-                                                      backgroundColor: Colors.yellow[700],
-                                                      focusColor: Colors.yellow[800],
-                                                      splashColor: Colors.yellow[800],
-                                                      elevation: 10,
-                                                      onPressed: (){
-                                                        String _playerId;
-                                                        //String matchStatusResponse;
-                                                        showOverlay().then
-                                                        (
-                                                          (createGameResponse) =>                                                     
-                                                          {
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) => Game(_category,pointsToWin,createGameResponse,_avatarIndex,_username,_playerId,null)
-                                                              ),
-                                                            ),
-                                                            showDialog( 
-                                                                context: context,
-                                                                builder: (BuildContext context){
-                                                                  return CustomDialog(createGameResponse);                                                                  
-                                                                }                                                                 
-                                                            ).then((value) => {
-                                                                setState(() {
-                                                                  _isLoading = false;
-                                                                })
-                                                            }),
-                                                          } 
-                                                        );                                                    
-                                                      },
-                                                      label: Text(
-                                                        'NEW ROOM',
-                                                        style: TextStyle(
-                                                          fontFamily: 'NunitoBold',
+                                                  //onWillPop: ()  async => false,
+                                                  child: FloatingActionButton
+                                                      .extended(
+                                                    backgroundColor:
+                                                        Colors.yellow[700],
+                                                    focusColor:
+                                                        Colors.yellow[800],
+                                                    splashColor:
+                                                        Colors.yellow[800],
+                                                    elevation: 10,
+                                                    onPressed: () {
+                                                      String _playerId;
+                                                      //String matchStatusResponse;
+                                                      showOverlay().then(
+                                                          (createGameResponse) =>
+                                                              {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) => Game(
+                                                                          _category,
+                                                                          pointsToWin,
+                                                                          createGameResponse,
+                                                                          _avatarIndex,
+                                                                          _username,
+                                                                          _playerId,
+                                                                          null)),
+                                                                ),
+                                                                showDialog(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (BuildContext
+                                                                                context) {
+                                                                          return CustomDialog(
+                                                                              createGameResponse);
+                                                                        })
+                                                                    .then(
+                                                                        (value) =>
+                                                                            {
+                                                                              setState(() {
+                                                                                _isLoading = false;
+                                                                              })
+                                                                            }),
+                                                              });
+                                                    },
+                                                    label: Text(
+                                                      'NEW ROOM',
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              'NunitoBold',
                                                           color: Colors.black,
-                                                          fontWeight: FontWeight.w800
-                                                        ),
-                                                      ),
-                                                      icon: Icon(
-                                                        Icons.settings_outlined,
-                                                        color: Colors.white70,
-                                                      ),
+                                                          fontWeight:
+                                                              FontWeight.w800),
                                                     ),
+                                                    icon: Icon(
+                                                      Icons.settings_outlined,
+                                                      color: Colors.white70,
+                                                    ),
+                                                  ),
                                                   //),
-                                                    
-                                                  
                                                 ),
                                                 Expanded(
-                                                  child: Container(
-                                                    
-                                                  ),
+                                                  child: Container(),
                                                 ),
                                               ],
                                             ),
                                           ),
                                           Expanded(
-                                            child: Container(
-                                            
-                                            ),
+                                            child: Container(),
                                           ),
                                         ],
                                       ),
@@ -649,19 +627,13 @@ class _CreateRoom extends State<CreateRoom> {
                               ),
                             ),
                           ),
-                          Expanded(
-                            child: Container(
-                              
-                            )
-                          ),
+                          Expanded(child: Container()),
                         ],
                       ),
                     ),
                     Expanded(
                       flex: 2,
-                      child: Container(
-                        
-                      ),
+                      child: Container(),
                     ),
                   ],
                 ),
@@ -676,7 +648,6 @@ class _CreateRoom extends State<CreateRoom> {
           ),
         ),
       ),
-      
     );
   }
 }

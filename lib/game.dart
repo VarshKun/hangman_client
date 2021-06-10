@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 //import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +34,15 @@ class Game extends StatefulWidget {
       this.avatarIndex, this._username, this.playerId, this.matchId);
 
   @override
-  _Game createState() => _Game(this._category, this.pointsToWin, _username,
-      parsed, this.createGameResponse, this.avatarIndex, this.matchId,this.playerId);
+  _Game createState() => _Game(
+      this._category,
+      this.pointsToWin,
+      _username,
+      parsed,
+      this.createGameResponse,
+      this.avatarIndex,
+      this.matchId,
+      this.playerId);
 }
 
 class _Game extends State<Game> {
@@ -56,24 +64,34 @@ class _Game extends State<Game> {
   }
 
   set parsedP(dynamic parsed) {
-    setState(() {
-      _parsed = parsed;
-    });
+    if (mounted) {
+      setState(() {
+        _parsed = parsed;
+      });
+    }
   }
 
-  _Game(this._category, this.pointsToWin, this.username, parsed,
-      String createGameResponse, this.avatarIndex, this.matchId, this.playerId) {
+  _Game(
+      this._category,
+      this.pointsToWin,
+      this.username,
+      parsed,
+      String createGameResponse,
+      this.avatarIndex,
+      this.matchId,
+      this.playerId) {
     if (playing) {
       musicplayer.loop('music/HangmanMusicMix.mp3');
     } else {
       musicplayer.fixedPlayer.pause();
     }
-    if (_category != null) { //if create game
+    if (_category != null) {
+      //if create game
       try {
         final parsed = json.decode(createGameResponse);
         this.matchId = parsed['matchId'];
-        tcpSend(joinGameHandler, errorHandler,
-            "joinmatch/$matchId/$username/$avatarIndex");
+        tcpSendV2(errorHandler, "joinmatch/$matchId/$username/$avatarIndex")
+            .then((value) => joinGameHandler(value));
         sleep(Duration(seconds: 5));
       } on FormatException catch (e) {
         print("That string didn't look like Json." + e.message);
@@ -82,7 +100,8 @@ class _Game extends State<Game> {
       }
     } else {
       try {
-        tcpSend(matchStatusHandler, errorHandler, "matchstatus/$matchId");
+        tcpSendV2(errorHandler, "matchstatus/$matchId")
+            .then((value) => matchStatusHandler(value));
       } on FormatException catch (e) {
         print("That string didn't look like Json." + e.message);
       } on NoSuchMethodError catch (e) {
@@ -90,10 +109,10 @@ class _Game extends State<Game> {
       }
     }
   }
-  void joinGameHandler(data) {
-    String _data = new String.fromCharCodes(data).trim();
+  Future<void> joinGameHandler(data) async {
+    //String _data = new String.fromCharCodes(data).trim();
     try {
-      final parsed = json.decode(_data);
+      final parsed = json.decode(data);
       if (parsed['playerid'] != null) {
         this.playerId = parsed['playerid'];
       } else if (parsed['error'] != null) {
@@ -107,7 +126,8 @@ class _Game extends State<Game> {
       print('That string was null!' + e.stackTrace.toString());
     }
     try {
-      tcpSend(matchStatusHandler, errorHandler, "matchstatus/$matchId");
+      var data = await tcpSendV2(errorHandler, "matchstatus/$matchId");
+      matchStatusHandler(data);
     } on FormatException catch (e) {
       print("That string didn't look like Json." + e.message);
     } on NoSuchMethodError catch (e) {
@@ -116,9 +136,13 @@ class _Game extends State<Game> {
   }
 
   void matchStatusHandler(data) {
-    String _data = new String.fromCharCodes(data).trim();
+    //String _data = new String.fromCharCodes(data).trim();
+    if (data is Uint8List) {
+      data = new String.fromCharCodes(data).trim();
+    }
     try {
-      parsedP = json.decode(_data);
+      parsedP = json.decode(data);
+
       if (parsedP['Id'] != null) {
         parsedP["players"]
             .values
@@ -166,7 +190,8 @@ class _Game extends State<Game> {
                   if (parsedP == null || parsedP['status'] == 0) {
                     return waitingStatus();
                   } else if (parsedP['status'] == 1) {
-                    return starting_game(wordlist, pointsToWin, matchId,playerId);
+                    return starting_game(
+                        wordlist, pointsToWin, matchId, playerId);
                   } else {
                     return InformationDialog(
                         21313, 'dropdownValue2', 'roomCode');
@@ -300,7 +325,12 @@ class _Game extends State<Game> {
                                                             Expanded(
                                                               flex: 2,
                                                               child: Text(
-                                                                parsedP["players"].values.elementAt(index)["score"].toString() +" points",
+                                                                parsedP["players"]
+                                                                        .values
+                                                                        .elementAt(
+                                                                            index)["score"]
+                                                                        .toString() +
+                                                                    " points",
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,

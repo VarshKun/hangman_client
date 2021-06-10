@@ -10,23 +10,19 @@ import 'game.dart';
 import 'hangman_client.dart';
 import 'join_game.dart';
 
-
-
 // ignore: must_be_immutable
-class JoinRoom extends StatefulWidget{
+class JoinRoom extends StatefulWidget {
   final String _username;
   final int _avatarIndex;
   //final String joinGameResponse;
- 
-  JoinRoom(this._avatarIndex, this._username);
-  
-  @override
-   _JoinRoom createState() => _JoinRoom(_avatarIndex,_username);
 
-   
+  JoinRoom(this._avatarIndex, this._username);
+
+  @override
+  _JoinRoom createState() => _JoinRoom(_avatarIndex, _username);
 }
 
-class _JoinRoom extends State<JoinRoom>{
+class _JoinRoom extends State<JoinRoom> {
   String _matchId;
   String pointsToWin;
   int category;
@@ -38,25 +34,25 @@ class _JoinRoom extends State<JoinRoom>{
   String _correct;
   String joinGameResponse;
   bool isLoading = true;
- 
+
   _JoinRoom(this.avatarIndex, this.username);
 
-  
   @override
-  void initState() { 
+  void initState() {
     _teddyController = TeddyController();
     super.initState();
   }
-  void joinGameHandler(data){
-    String _data = new String.fromCharCodes(data).trim();
+
+  void joinGameHandler(data) {
+    //String _data = new String.fromCharCodes(data).trim();
     try {
-      final parsed = json.decode(_data); 
-      if (parsed['playerid'] != null){
+      final parsed = json.decode(data);
+      if (parsed['playerid'] != null) {
         this.playerId = parsed['playerid'];
         _teddyController.submitMatchId(playerId);
         _correct = _teddyController.codeCheck();
-        Timer (Duration(seconds:2), (){
-          if (_correct == 'true' ){
+        Timer(Duration(seconds: 2), () {
+          if (_correct == 'true') {
             isLoading = false;
             //int _avatarIndex;
             //int _category;
@@ -69,19 +65,15 @@ class _JoinRoom extends State<JoinRoom>{
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => Game(null,null,null,avatarIndex,username,playerId,_matchId)
-              ),
+                  builder: (context) => Game(null, null, null, avatarIndex,
+                      username, playerId, _matchId)),
             );
-
           }
-        });   
-
-      }
-      else if(parsed['error'] != null){
+        });
+      } else if (parsed['error'] != null) {
         print(parsed['error']);
         _teddyController.submitMatchId(playerId);
-      }
-      else{
+      } else {
         print("Unknown error");
         _teddyController.submitMatchId(playerId);
       }
@@ -89,11 +81,10 @@ class _JoinRoom extends State<JoinRoom>{
       print("That string didn't look like Json." + e.message);
     } on NoSuchMethodError catch (e) {
       print('That string was null!' + e.stackTrace.toString());
-    } 
-    
+    }
   }
 
-  void errorHandler(Object error, StackTrace trace){
+  void errorHandler(Object error, StackTrace trace) {
     print(error);
   }
 
@@ -103,32 +94,31 @@ class _JoinRoom extends State<JoinRoom>{
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.blue,
       //body: WillPopScope(
-        //onWillPop: ()  async => false,
+      //onWillPop: ()  async => false,
       body: Column(
-        children:[
+        children: [
           Expanded(
-            flex:2,
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container
-                            (
-                              color: Colors.blue,
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Row
-                            (
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: Column(children: [
+            flex: 2,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: 3,
+                                child: Column(
+                                  children: [
                                     Expanded(
                                       flex: 3,
                                       child: Row(
@@ -136,24 +126,21 @@ class _JoinRoom extends State<JoinRoom>{
                                           Expanded(
                                             flex: 3,
                                             child: IconButton(
-                                              icon: Icon(Icons.arrow_back_rounded),
-                                              onPressed: (){
-                                                Navigator.pop(context);
-                                                //Navigator.push(context, MaterialPageRoute(builder:(context) => HomeScreen() ));
-                                              },
-                                              color: Colors.yellow[700],
-                                              iconSize: 35
-                                            ),
+                                                icon: Icon(
+                                                    Icons.arrow_back_rounded),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  //Navigator.push(context, MaterialPageRoute(builder:(context) => HomeScreen() ));
+                                                },
+                                                color: Colors.yellow[700],
+                                                iconSize: 35),
                                           ),
                                           Expanded(
                                             flex: 2,
-                                            child: Container(
-                                              
-                                            ),
+                                            child: Container(),
                                           ),
                                         ],
                                       ),
-                                      
                                     ),
                                     Expanded(
                                       flex: 3,
@@ -165,10 +152,10 @@ class _JoinRoom extends State<JoinRoom>{
                                               child: Text(
                                                 'BACK',
                                                 style: TextStyle(
-                                                  fontFamily: 'PumpkinCheesecake',
-                                                  fontSize: 30,
-                                                  color: Colors.yellow[700]
-                                                ),
+                                                    fontFamily:
+                                                        'PumpkinCheesecake',
+                                                    fontSize: 30,
+                                                    color: Colors.yellow[700]),
                                               ),
                                             ),
                                           ),
@@ -178,203 +165,194 @@ class _JoinRoom extends State<JoinRoom>{
                                         ],
                                       ),
                                     ),
-                                  ],)
-                                ),
-                                Expanded(
-                                  flex: 10,
-                                  child: BorderedText(
-                                    strokeWidth: 3,
-                                    strokeColor: Colors.grey[900],
-                                    child: Text(
-                                      'JOIN ROOM',
-                                      style: TextStyle(
-                                        fontFamily: 'NunitoBold',
-                                        fontSize: 40,
-                                        color: Colors.yellow[700],
-                                        shadows: <Shadow>[
-                                          Shadow(
+                                  ],
+                                )),
+                            Expanded(
+                              flex: 10,
+                              child: BorderedText(
+                                strokeWidth: 3,
+                                strokeColor: Colors.grey[900],
+                                child: Text(
+                                  'JOIN ROOM',
+                                  style: TextStyle(
+                                      fontFamily: 'NunitoBold',
+                                      fontSize: 40,
+                                      color: Colors.yellow[700],
+                                      shadows: <Shadow>[
+                                        Shadow(
                                             color: Colors.black,
-                                            offset: Offset(3,2),
-                                            blurRadius: 3
-                                          )
-                                        ]
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
+                                            offset: Offset(3, 2),
+                                            blurRadius: 3)
+                                      ]),
+                                  textAlign: TextAlign.center,
                                 ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Container
-                                  (
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container
-                            (
-                              color: Colors.blue,
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                color: Colors.blue,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    
-                  ],
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+              ],
+            ),
           ),
           Expanded(
-            flex: 7,
-            child: Row(
-              children: [
-                Expanded(
-                    child: Container(
-                      color: Colors.blue
-                    ),
-                ),
-                Expanded(
-                  flex: 22,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      color: Colors.white, //white box
-                      child: Column(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Center(
-                              child: Text(
-                                'Join party :',
-                                style: TextStyle(
-                                  fontFamily: 'NunitoBold',
-                                  fontSize:24,
+              flex: 7,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(color: Colors.blue),
+                  ),
+                  Expanded(
+                      flex: 22,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          color: Colors.white, //white box
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Center(
+                                  child: Text(
+                                    'Join party :',
+                                    style: TextStyle(
+                                      fontFamily: 'NunitoBold',
+                                      fontSize: 24,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
                               ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: CircleAvatar(
-                              radius: 90,
-                              backgroundColor: Colors.white,
-                              child: new FlareActor(
-                                "assets/animations/teddy.flr",
-                                alignment: Alignment.center,
-                                fit: BoxFit.contain,
-                                animation: animationType,
-                                controller: _teddyController,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Container(),
-                                      ),
-                                      Expanded(
-                                        flex: 3,
-                                        child: TrackingTextInput(
-                                          onTextChanged: (String value){
-                                            _teddyController.matchId(value);
-                                          },
-                                          hint: "Enter room code here",
-                                          onCaretMoved: (Offset caret){
-                                            _teddyController.lookAt(caret);
-                                          },
-                                        ),
-                                        
-                                      ),
-                                      Expanded(
-                                        child: Container(),
-                                      ),
-                                    ],
-                                  )
+                              Expanded(
+                                flex: 3,
+                                child: CircleAvatar(
+                                  radius: 90,
+                                  backgroundColor: Colors.white,
+                                  child: new FlareActor(
+                                    "assets/animations/teddy.flr",
+                                    alignment: Alignment.center,
+                                    fit: BoxFit.contain,
+                                    animation: animationType,
+                                    controller: _teddyController,
+                                  ),
                                 ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: Container(),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
+                              ),
+                              Expanded(
+                                  flex: 5,
+                                  child: Column(children: [
+                                    Expanded(
                                         child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: TrackingTextInput(
+                                            onTextChanged: (String value) {
+                                              _teddyController.matchId(value);
+                                            },
+                                            hint: "Enter room code here",
+                                            onCaretMoved: (Offset caret) {
+                                              _teddyController.lookAt(caret);
+                                            },
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(),
+                                        ),
+                                      ],
+                                    )),
+                                    Expanded(
+                                        flex: 3,
+                                        child: Column(
                                           children: [
                                             Expanded(
                                               child: Container(),
                                             ),
                                             Expanded(
-                                              flex:2,
-                                              child: JoinGameButton(
-                                                child:Text(
-                                                  "JOIN GAME",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontFamily: 'PumpkinCheesecake',
-                                                    fontSize: 35,
-                                                    color: Colors.white
-                                                  ),
-                                                ),
-                                                onPressed: (){
-                                                  //_teddyController.submitMatchId();
-                                                  try {
-                                                    _matchId = _teddyController.getMatchId();
-                                                    tcpSend(joinGameHandler, errorHandler,"joinmatch/$_matchId/$username/$avatarIndex");
-                                                  } on FormatException catch (e) {
-                                                    print("That string didn't look like Json." + e.message);
-                                                  } on NoSuchMethodError catch (e) {
-                                                    print('That string was null!' + e.stackTrace.toString());
-                                                  }    
-                                                },
-                                              )
-                                              
-                                            ),
+                                                flex: 2,
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Container(),
+                                                    ),
+                                                    Expanded(
+                                                        flex: 2,
+                                                        child: JoinGameButton(
+                                                          child: Text(
+                                                            "JOIN GAME",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'PumpkinCheesecake',
+                                                                fontSize: 35,
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          onPressed: () async {
+                                                            //_teddyController.submitMatchId();
+                                                            try {
+                                                              _matchId =
+                                                                  _teddyController
+                                                                      .getMatchId();
+                                                              var data = await tcpSendV2(
+                                                                  errorHandler,
+                                                                  "joinmatch/$_matchId/$username/$avatarIndex");
+                                                              joinGameHandler(
+                                                                  data);
+                                                            } on FormatException catch (e) {
+                                                              print(
+                                                                  "That string didn't look like Json." +
+                                                                      e.message);
+                                                            } on NoSuchMethodError catch (e) {
+                                                              print('That string was null!' +
+                                                                  e.stackTrace
+                                                                      .toString());
+                                                            }
+                                                          },
+                                                        )),
+                                                    Expanded(
+                                                      child: Container(),
+                                                    ),
+                                                  ],
+                                                )),
                                             Expanded(
+                                              flex: 4,
                                               child: Container(),
                                             ),
                                           ],
-                                        )
-                                      ),
-                                      Expanded(
-                                        flex: 4,
-                                        child: Container(),
-                                      ),
-                                    ],
-                                  )
-                                ),
-                              ]
-                            )
-                          )
-                        ],
-                      ),
-                    ),
+                                        )),
+                                  ]))
+                            ],
+                          ),
+                        ),
+                      )),
+                  Expanded(
+                    child: Container(),
                   )
-                ),
-                Expanded(
-                    child: Container(
-                        
-                    ),
-                  )
-              ],
-            )
-          ),
+                ],
+              )),
           Expanded(
-            flex: 1,
-            child: Container(
-              color: Colors.blue,
-            )
-          )
+              flex: 1,
+              child: Container(
+                color: Colors.blue,
+              ))
         ],
       ),
 
