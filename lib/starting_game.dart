@@ -38,7 +38,7 @@ class _starting_game extends State<starting_game> {
   String playerId;
   _starting_game(this.words, this.pointsToWin, this.matchId, this.playerId) {
     starting_game.currentinstance = this;
-    wordToFind = words[wordcounter];
+    //wordToFind = words[wordcounter];
   }
 
   void errorHandler(Object error, StackTrace trace) {

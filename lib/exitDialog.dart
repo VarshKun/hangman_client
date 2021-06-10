@@ -1,12 +1,13 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
-import 'package:hangman_multiplayer/menupage.dart';
+import 'package:hangman_multiplayer/game.dart';
 import 'package:lottie/lottie.dart';
 
 class _ExitDialog extends State<ExitDialog> {
   final AudioCache musicplayer;
-  _ExitDialog(this.musicplayer);
+  Game gamePage;
+  _ExitDialog(this.musicplayer, this.gamePage);
   dialogContent(BuildContext context) {
     return Container(
       decoration: new BoxDecoration(
@@ -77,6 +78,8 @@ class _ExitDialog extends State<ExitDialog> {
                         flex: 2,
                         child: FloatingActionButton(
                           onPressed: () {
+                            gamePage.stop = true;
+                            gamePage.parsed = null;
                             musicplayer.fixedPlayer.stop();
                             Navigator.popUntil(
                                 context, (route) => route.isFirst);
@@ -146,10 +149,12 @@ class _ExitDialog extends State<ExitDialog> {
   }
 }
 
+// ignore: must_be_immutable
 class ExitDialog extends StatefulWidget {
   final AudioCache musicplayer;
-  ExitDialog(this.musicplayer);
+  Game game;
+  ExitDialog(this.musicplayer, this.game);
 
   @override
-  _ExitDialog createState() => _ExitDialog(musicplayer);
+  _ExitDialog createState() => _ExitDialog(musicplayer, game);
 }

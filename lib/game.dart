@@ -19,6 +19,7 @@ import 'informationDialog.dart';
 class Game extends StatefulWidget {
   int _category;
   String pointsToWin;
+  dynamic parsed;
   final String createGameResponse;
   //final String matchStatusResponse;
   String matchId;
@@ -27,7 +28,8 @@ class Game extends StatefulWidget {
   final String _username;
   //String _playerId;
   String matchStatus;
-  var parsed;
+  // var parsed;
+  bool stop = false;
 
   //Text username = Text(usernameController.toString());
   Game(this._category, this.pointsToWin, this.createGameResponse,
@@ -38,11 +40,11 @@ class Game extends StatefulWidget {
       this._category,
       this.pointsToWin,
       _username,
-      parsed,
       this.createGameResponse,
       this.avatarIndex,
       this.matchId,
-      this.playerId);
+      this.playerId,
+      this);
 }
 
 class _Game extends State<Game> {
@@ -54,19 +56,20 @@ class _Game extends State<Game> {
   final String username;
   int avatarIndex;
   bool playing = true;
-  dynamic _parsed;
+  // dynamic _parsed;
   var matchId;
   var playerId;
   List<String> wordlist;
+  Game game;
 
   dynamic get parsedP {
-    return _parsed;
+    return game.parsed;
   }
 
   set parsedP(dynamic parsed) {
     if (mounted) {
       setState(() {
-        _parsed = parsed;
+        game.parsed = parsed;
       });
     }
   }
@@ -75,11 +78,11 @@ class _Game extends State<Game> {
       this._category,
       this.pointsToWin,
       this.username,
-      parsed,
       String createGameResponse,
       this.avatarIndex,
       this.matchId,
-      this.playerId) {
+      this.playerId,
+      this.game) {
     if (playing) {
       musicplayer.loop('music/HangmanMusicMix.mp3');
     } else {
@@ -154,7 +157,9 @@ class _Game extends State<Game> {
         // ignore: unnecessary_statements
         print('Value: $wordlist');
         Future.delayed(const Duration(milliseconds: 1500), () {
-          tcpSend(matchStatusHandler, errorHandler, "matchstatus/$matchId");
+          if (!game.stop) {
+            tcpSend(matchStatusHandler, errorHandler, "matchstatus/$matchId");
+          }
         });
       } else if (parsedP['error'] != null) {
         print(parsedP['error']);
@@ -522,7 +527,8 @@ class _Game extends State<Game> {
                                                       builder: (BuildContext
                                                           context) {
                                                         return ExitDialog(
-                                                            musicplayer);
+                                                            musicplayer,
+                                                            this.game);
                                                       });
                                                 },
                                                 child: Icon(
