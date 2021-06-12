@@ -13,7 +13,7 @@ class Category extends StatefulWidget {
 
   final ValueChanged<int> onSelectedIndexChanged;
 
-  Category({Key key, this.onSelectedIndexChanged}) : super(key: key);
+  Category({ Key key,  this.onSelectedIndexChanged}) : super(key: key);
 
   @override
   _Category createState() => _Category();

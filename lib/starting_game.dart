@@ -1,9 +1,9 @@
 import 'dart:convert';
-
+import 'package:flutter/services.dart';
+import 'package:rive/rive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hangman_multiplayer/chatbox.dart';
-
 import 'hangman_client.dart';
 
 String wordToFind;
@@ -36,6 +36,10 @@ class _starting_game extends State<starting_game> {
   String pointsToWin;
   String matchId;
   String playerId;
+  Artboard _riveArtboard;
+  StateMachineController _controller;
+  SMINumber lives;
+  bool get isPlaying => _controller.isActive ?? false;
   _starting_game(this.words, this.pointsToWin, this.matchId, this.playerId) {
     starting_game.currentinstance = this;
     totalScore = 0;
@@ -62,7 +66,7 @@ class _starting_game extends State<starting_game> {
   }
 
   void updateScoreHandler(data) {
-    String _data  = new String.fromCharCodes(data).trim();
+    String _data = new String.fromCharCodes(data).trim();
     try {
       final parsed = json.decode(_data);
       if (parsed['error'] != null) {
@@ -73,6 +77,25 @@ class _starting_game extends State<starting_game> {
     } on NoSuchMethodError catch (e) {
       print('That string was null!' + e.stackTrace.toString());
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    rootBundle
+        .load('assets/animations/hangman_pencilmation.riv')
+        .then((data) async {
+      final file = RiveFile.import(data);
+      final artboard = file.mainArtboard;
+      var controller =
+          StateMachineController.fromArtboard(artboard, 'StateMachine1');
+      if (controller != null) {
+        artboard.addController(controller);
+        // lives = controller.findInput('DoomsDayClock');
+        lives = controller.inputs.elementAt(0);
+      }
+      setState(() => _riveArtboard = artboard);
+    });
   }
 
   @override
@@ -91,28 +114,94 @@ class _starting_game extends State<starting_game> {
             //Expanded(child: Container(color: Colors.cyan,)),
             Expanded(
               flex: 1,
-              child: Center(
-                child: Text(
-                  hiddenWordToGuess,
-                  style: TextStyle(
-                    letterSpacing: 10,
-                    fontSize: 20,
-                    //decoration: TextDecoration.underline
+              child: Column(
+                children: [
+                  Expanded(
+                      flex: 10,
+                      child: Container(
+                        color: Colors.yellow,
+                      )),
+                  Text(
+                    "Round 1",
+                    style: TextStyle(
+                      letterSpacing: 10,
+                      fontSize: 20,
+                      //decoration: TextDecoration.underline
+                    ),
                   ),
-                ),
+                  Expanded(
+                      flex: 1,
+                      child: Container(
+                        color: Colors.black,
+                      )),
+                  Expanded(
+                    flex: 18,
+                    child: Container(
+                      color: Colors.cyan,
+                      child: Center(
+                        child: Text(
+                          hiddenWordToGuess,
+                          style: TextStyle(
+                            letterSpacing: 10,
+                            fontSize: 20,
+                            //decoration: TextDecoration.underline
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(child: Text(charsUsedBad.toString())),
-            Expanded(child: Text((() {
-              if (won == true) {
-                return "NEXT ROUND LOADING...";
-              } else {
-                return "No of guesses remaining: " + doomsdayClock.toString();
-              }
-            })())
-                // child: Text("No of guesses remaining: " + doomsdayClock.toString()),
+            //Expanded(child: Text(charsUsedBad.toString())),
+            // Expanded(child: Text((() {
+            //   if (won == true) {
+            //     won = false;
+            //     return "NEXT ROUND LOADING...";
+            //   } else {
+            //     return "No of guesses remaining: " + doomsdayClock.toString();
+            //   }
+            // })())),
+            // SizedBox(
+            //   height: 30,
+            // ),
+            // Text("Letters used: " + charsUsedBad.toString()),
+            // Text((() {
+            //   if (won == true) {
+            //     won = false;
+            //     return "NEXT ROUND LOADING...";
+            //   } else {
+            //     return "Number of guesses remaining: " +
+            //         doomsdayClock.toString();
+            //   }
+            // })()),
+            Expanded(
+                flex: 4,
+                child: Column(
+                  children: [
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: _riveArtboard == null
+                            ? const SizedBox()
+                            : Rive(
+                                alignment: Alignment.topCenter,
+                                artboard: _riveArtboard,
+                                fit: BoxFit.fill,
+                              ),
+                      ),
+                    ),
 
-                ),
+                    // Expanded(
+                    //     flex: 2,
+                    //     child: Container(
+                    //       color: Colors.yellow,
+                    //     ))
+                  ],
+                ))
           ],
         ),
       ),
@@ -144,6 +233,7 @@ class _starting_game extends State<starting_game> {
               doomsdayClock -= 1;
               charsUsedBad.add(strGuessTyped);
               print("Wrong! Remaining guesses:" + doomsdayClock.toString());
+              lives.value++;
             }
           }
           if (charsToFind.length == 0) {
@@ -154,11 +244,11 @@ class _starting_game extends State<starting_game> {
             print(totalScore);
             if (totalScore != int.parse(pointsToWin)) {
               startNewWord = true;
-              Future.delayed(const Duration(seconds: 3), () {
-                wordcounter++;
-                won = false;
-                newGame();
-              });
+              //Future.delayed(const Duration(seconds: 3), () {
+              wordcounter++;
+              won = false;
+              newGame();
+              //});
             } else {
               print("You are the winner!");
             }
@@ -166,10 +256,11 @@ class _starting_game extends State<starting_game> {
           if (doomsdayClock <= 0) {
             print("You died.");
             startNewWord = true;
-            Future.delayed(const Duration(seconds: 3), () {
-              wordcounter++;
-              newGame();
-            });
+            //Future.delayed(const Duration(seconds: 3), () {
+            wordcounter++;
+            won = true;
+            //newGame();
+            //});
           }
           print(wordCurrently(charsToFind, wordToFind));
           setWordShow();

@@ -5,7 +5,6 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hangman_multiplayer/inviteDialog.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-
 import 'game.dart';
 import 'hangman_client.dart';
 
