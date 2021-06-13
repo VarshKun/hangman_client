@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 //import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hangman_multiplayer/chatbox.dart';
 import 'package:hangman_multiplayer/customProgressBar.dart';
 import 'package:hangman_multiplayer/hangman_client.dart';
@@ -179,6 +180,7 @@ class _Game extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return WillPopScope(
       onWillPop: () async => false,
       child: ChangeNotifierProvider(

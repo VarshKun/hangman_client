@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,7 @@ import 'package:im_animations/im_animations.dart';
 
 String wordToFind;
 int wordcounter = 0;
+int roundcounter = 1;
 List<String> charsToFind;
 List<String> charsToRemaining;
 List<String> charsUsedBad = [];
@@ -48,6 +50,7 @@ class _starting_game extends State<starting_game> {
     charsToFind = [];
     startNewWord = false;
     wordcounter = 0;
+    roundcounter = 1;
     wordToFind = words[wordcounter];
     charsUsedBad = [];
     charsUsedBad.clear();
@@ -92,10 +95,27 @@ class _starting_game extends State<starting_game> {
           StateMachineController.fromArtboard(artboard, 'StateMachine1');
       if (controller != null) {
         artboard.addController(controller);
-        // lives = controller.findInput('DoomsDayClock');
         lives = controller.inputs.elementAt(0);
       }
       setState(() => _riveArtboard = artboard);
+    });
+  }
+
+  void reinitialiseWidget() async {
+    Future.delayed(Duration(milliseconds: 500), () {
+      rootBundle
+          .load('assets/animations/hangman_pencilmation.riv')
+          .then((data) async {
+        final file = RiveFile.import(data);
+        final artboard = file.mainArtboard;
+        var controller =
+            StateMachineController.fromArtboard(artboard, 'StateMachine1');
+        if (controller != null) {
+          artboard.addController(controller);
+          lives = controller.inputs.elementAt(0);
+        }
+        setState(() => _riveArtboard = artboard);
+      });
     });
   }
 
@@ -104,8 +124,8 @@ class _starting_game extends State<starting_game> {
     if (startNewWord) {
       startNewWord = false;
       wordToFind = words[wordcounter];
-      //lives.value = 0;
       newGame();
+      reinitialiseWidget();
     }
 
     return Container(
@@ -123,12 +143,11 @@ class _starting_game extends State<starting_game> {
                     Expanded(
                         flex: 1,
                         child: Text(
-                          "Round 1",
+                          "Round " + roundcounter.toString(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             letterSpacing: 6,
                             fontSize: 20,
-                            //decoration: TextDecoration.underline
                           ),
                         )),
                     Expanded(
@@ -141,7 +160,6 @@ class _starting_game extends State<starting_game> {
                               style: TextStyle(
                                 letterSpacing: 10,
                                 fontSize: 20,
-                                //decoration: TextDecoration.underline
                               ),
                             ),
                           ),
@@ -184,35 +202,69 @@ class _starting_game extends State<starting_game> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              alignment: Alignment.topCenter,
-                              //color: Colors.amberAccent,
-                              child: HeartBeat(
-                                beatsPerMinute: 70,
-                                child: Image.asset(
-                                  'assets/images/heart.png',
-                                  //height: 50,
-                                  //width: 100,
+                        child: Container(
+                          //color: Colors.amber,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                  child: Container(
+                                //color: Colors.black,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                            //color: Colors.cyan,
+                                            )),
+                                    Expanded(
+                                        flex: 4,
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                              //color: Colors.black,
+                                              child: Center(
+                                                child: HeartBeat(
+                                                  beatsPerMinute: 70,
+                                                  child: Image.asset(
+                                                    'assets/images/heart.png',
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              //color: Colors.blueAccent,
+                                              child: Center(
+                                                child: BorderedText(
+                                                  strokeWidth: 2,
+                                                  strokeColor:
+                                                      Colors.yellow[700],
+                                                  child: Text(
+                                                    doomsdayClock.toString(),
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )),
+                                    Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                            //color: Colors.yellow,
+                                            )),
+                                  ],
                                 ),
-                              ),
-                            ),
-                            Container(
-                              child: Align(
-                                alignment: Alignment(0, -0.92),
-                                child: Text(
-                                  doomsdayClock.toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    //letterSpacing: 2,
-                                    fontSize: 20,
-                                    //decoration: TextDecoration.underline
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
+                              )),
+                              Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                      //color: Colors.cyan,
+                                      )),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -262,6 +314,7 @@ class _starting_game extends State<starting_game> {
               startNewWord = true;
               //Future.delayed(const Duration(seconds: 3), () {
               wordcounter++;
+              roundcounter++;
               won = false;
               newGame();
               //});
@@ -274,6 +327,7 @@ class _starting_game extends State<starting_game> {
             startNewWord = true;
             //Future.delayed(const Duration(seconds: 3), () {
             wordcounter++;
+            roundcounter++;
             won = true;
             //newGame();
             //});
