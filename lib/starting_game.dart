@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hangman_multiplayer/chatbox.dart';
 import 'hangman_client.dart';
+import 'package:im_animations/im_animations.dart';
 
 String wordToFind;
 int wordcounter = 0;
@@ -103,6 +104,7 @@ class _starting_game extends State<starting_game> {
     if (startNewWord) {
       startNewWord = false;
       wordToFind = words[wordcounter];
+      //lives.value = 0;
       newGame();
     }
 
@@ -111,96 +113,110 @@ class _starting_game extends State<starting_game> {
       child: Center(
         child: Column(
           children: [
-            //Expanded(child: Container(color: Colors.cyan,)),
             Expanded(
-              flex: 1,
-              child: Column(
-                children: [
-                  Expanded(
-                      flex: 10,
-                      child: Container(
-                        color: Colors.yellow,
-                      )),
-                  Text(
-                    "Round 1",
-                    style: TextStyle(
-                      letterSpacing: 10,
-                      fontSize: 20,
-                      //decoration: TextDecoration.underline
-                    ),
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child: Container(
-                        color: Colors.black,
-                      )),
-                  Expanded(
-                    flex: 18,
-                    child: Container(
-                      color: Colors.cyan,
-                      child: Center(
+              flex: 2,
+              child: Container(
+                //color: Colors.red,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                        flex: 1,
                         child: Text(
-                          hiddenWordToGuess,
+                          "Round 1",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            letterSpacing: 10,
+                            letterSpacing: 6,
                             fontSize: 20,
                             //decoration: TextDecoration.underline
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                        )),
+                    Expanded(
+                        flex: 2,
+                        child: Container(
+                          //color: Colors.black38,
+                          child: Center(
+                            child: Text(
+                              hiddenWordToGuess,
+                              style: TextStyle(
+                                letterSpacing: 10,
+                                fontSize: 20,
+                                //decoration: TextDecoration.underline
+                              ),
+                            ),
+                          ),
+                        )),
+                    Expanded(
+                        child: Container(
+                      //color: Colors.white,
+                      child: Text("Letters used: " + charsUsedBad.toString()),
+                    ))
+                  ],
+                ),
               ),
             ),
-            //Expanded(child: Text(charsUsedBad.toString())),
-            // Expanded(child: Text((() {
-            //   if (won == true) {
-            //     won = false;
-            //     return "NEXT ROUND LOADING...";
-            //   } else {
-            //     return "No of guesses remaining: " + doomsdayClock.toString();
-            //   }
-            // })())),
-            // SizedBox(
-            //   height: 30,
-            // ),
-            // Text("Letters used: " + charsUsedBad.toString()),
-            // Text((() {
-            //   if (won == true) {
-            //     won = false;
-            //     return "NEXT ROUND LOADING...";
-            //   } else {
-            //     return "Number of guesses remaining: " +
-            //         doomsdayClock.toString();
-            //   }
-            // })()),
             Expanded(
-                flex: 4,
-                child: Column(
-                  children: [
-                    // SizedBox(
-                    //   height: 20,
-                    // ),
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: _riveArtboard == null
-                            ? const SizedBox()
-                            : Rive(
-                                alignment: Alignment.topCenter,
-                                artboard: _riveArtboard,
-                                fit: BoxFit.fill,
-                              ),
+                flex: 6,
+                child: Container(
+                  //color: Colors.black,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                            //color: Colors.amber,
+                            ),
                       ),
-                    ),
-
-                    // Expanded(
-                    //     flex: 2,
-                    //     child: Container(
-                    //       color: Colors.yellow,
-                    //     ))
-                  ],
+                      Expanded(
+                        flex: 6,
+                        child: Container(
+                          //color: Colors.cyanAccent,
+                          child: Center(
+                            child: _riveArtboard == null
+                                ? const SizedBox()
+                                : Rive(
+                                    alignment: Alignment.bottomCenter,
+                                    artboard: _riveArtboard,
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              alignment: Alignment.topCenter,
+                              //color: Colors.amberAccent,
+                              child: HeartBeat(
+                                beatsPerMinute: 70,
+                                child: Image.asset(
+                                  'assets/images/heart.png',
+                                  //height: 50,
+                                  //width: 100,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: Align(
+                                alignment: Alignment(0, -0.92),
+                                child: Text(
+                                  doomsdayClock.toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    //letterSpacing: 2,
+                                    fontSize: 20,
+                                    //decoration: TextDecoration.underline
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ))
           ],
         ),
@@ -290,6 +306,7 @@ class _starting_game extends State<starting_game> {
     charsUsedBad = [];
     charsUsedBad.clear();
     doomsdayClock = 7;
+
     charsToFind = [];
     for (int i = 0; wordToFind.length > i; i++) {
       if (!charsToFind.contains(wordToFind.split("")[i].toLowerCase()) &&
