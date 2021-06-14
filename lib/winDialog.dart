@@ -82,7 +82,7 @@ class _winDialog extends State<winDialog> {
                         strokeWidth: 3,
                         strokeColor: Colors.grey[900],
                         child: Text(
-                          'Ranks: ',
+                          'Rank : ',
                           style: TextStyle(
                               fontFamily: 'NunitoBold',
                               fontSize: 30,
@@ -131,7 +131,7 @@ class _winDialog extends State<winDialog> {
                           Expanded(
                               flex: 2,
                               child: Container(
-                                color: Colors.white,
+                                //color: Colors.white,
                                 child: Align(
                                   alignment: Alignment.center,
                                   child: BorderedText(
@@ -191,7 +191,7 @@ class _winDialog extends State<winDialog> {
                           Expanded(
                               flex: 2,
                               child: Container(
-                                color: Colors.cyanAccent,
+                                //color: Colors.cyanAccent,
                                 child: Align(
                                   alignment: Alignment.center,
                                   child: BorderedText(
@@ -251,7 +251,7 @@ class _winDialog extends State<winDialog> {
                           Expanded(
                               flex: 2,
                               child: Container(
-                                color: Colors.cyan,
+                                //color: Colors.cyan,
                                 child: Align(
                                   alignment: Alignment.center,
                                   child: BorderedText(
@@ -260,7 +260,7 @@ class _winDialog extends State<winDialog> {
                                     child: Text(
                                       sortedScores.length > 2
                                           ? sortedScores?.elementAt(2)['name']
-                                          : "",
+                                          : "-",
                                       style: TextStyle(
                                           fontFamily: 'NunitoBold',
                                           fontSize: 25,
