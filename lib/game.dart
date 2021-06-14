@@ -204,12 +204,8 @@ class _Game extends State<Game> {
                   } else if (parsedP['status'] == 1) {
                     return starting_game(wordlist, pointsToWin, matchId,
                         playerId, avatarIndex, username, matchStatus);
-                  } else {}
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) =>
-                    //             winDialog(avatarIndex, username)));
+                  } else
+                    return winDialog(avatarIndex, username);
                 }())),
               ),
               Expanded(
