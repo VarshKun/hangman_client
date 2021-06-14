@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/services.dart';
+import 'package:hangman_multiplayer/winDialog.dart';
 import 'package:rive/rive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,8 @@ List<String> charsToRemaining;
 List<String> charsUsedBad = [];
 String hiddenWordToGuess;
 int doomsdayClock;
-bool won = false;
+bool wonRound = false;
+bool wonMatch = false;
 bool startNewWord = true;
 int totalScore = 0;
 
@@ -26,11 +28,14 @@ class starting_game extends StatefulWidget {
   final String pointsToWin;
   final String matchId;
   final String playerId;
-  starting_game(this.words, this.pointsToWin, this.matchId, this.playerId);
+  final int avatarIndex;
+  final String username;
+  starting_game(this.words, this.pointsToWin, this.matchId, this.playerId,
+      this.avatarIndex, this.username);
   static _starting_game currentinstance;
   @override
-  State createState() =>
-      new _starting_game(words, pointsToWin, matchId, playerId);
+  State createState() => new _starting_game(
+      words, pointsToWin, matchId, playerId, avatarIndex, username);
 }
 
 // ignore: camel_case_types
@@ -42,11 +47,15 @@ class _starting_game extends State<starting_game> {
   Artboard _riveArtboard;
   StateMachineController _controller;
   SMINumber lives;
+  int avatarIndex;
+  String username;
   bool get isPlaying => _controller.isActive ?? false;
-  _starting_game(this.words, this.pointsToWin, this.matchId, this.playerId) {
+  _starting_game(this.words, this.pointsToWin, this.matchId, this.playerId,
+      this.avatarIndex, this.username) {
     starting_game.currentinstance = this;
     totalScore = 0;
-    won = false;
+    wonRound = false;
+    wonMatch = false;
     charsToFind = [];
     startNewWord = false;
     wordcounter = 0;
@@ -81,6 +90,13 @@ class _starting_game extends State<starting_game> {
     } on NoSuchMethodError catch (e) {
       print('That string was null!' + e.stackTrace.toString());
     }
+  }
+
+  // ignore: missing_return
+  Future<String> showOverlay() async {
+    setState(() {
+      wonRound = true;
+    });
   }
 
   @override
@@ -306,20 +322,27 @@ class _starting_game extends State<starting_game> {
           }
           if (charsToFind.length == 0) {
             print(wordCurrently(charsToFind, wordToFind));
-            won = true;
+            wonRound = true;
             print("You guessed the word correctly.");
             totalScore = totalScore + 5;
             print(totalScore);
-            if (totalScore != int.parse(pointsToWin)) {
+            if (totalScore < int.parse(pointsToWin)) {
               startNewWord = true;
               //Future.delayed(const Duration(seconds: 3), () {
               wordcounter++;
               roundcounter++;
-              won = false;
+              wonRound = false;
               newGame();
               //});
             } else {
               print("You are the winner!");
+              showOverlay().then((value) => {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return winDialog(avatarIndex,username);
+                        })
+                  });
             }
           }
           if (doomsdayClock <= 0) {
@@ -328,7 +351,7 @@ class _starting_game extends State<starting_game> {
             //Future.delayed(const Duration(seconds: 3), () {
             wordcounter++;
             roundcounter++;
-            won = true;
+            //won = true;
             //newGame();
             //});
           }

@@ -198,7 +198,7 @@ class _Game extends State<Game> {
                     return waitingStatus();
                   } else if (parsedP['status'] == 1) {
                     return starting_game(
-                        wordlist, pointsToWin, matchId, playerId);
+                        wordlist, pointsToWin, matchId, playerId,avatarIndex,username);
                   } else {
                     return InformationDialog(
                         21313, 'dropdownValue2', 'roomCode');

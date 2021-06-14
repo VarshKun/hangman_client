@@ -99,6 +99,7 @@ flutter:
    - assets/animations/waiting_pigeon.json
    - assets/animations/log_out.json
    - assets/animations/setting.json
+   - assets/animations/win.json
    - assets/animations/teddy.flr
    - assets/animations/hangman_pencilmation.riv
    - assets/music/HangmanMusicMix.mp3
