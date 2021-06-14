@@ -79,9 +79,9 @@ class _starting_game extends State<starting_game> {
   }
 
   void updateScoreHandler(data) {
-    String _data = new String.fromCharCodes(data).trim();
+    //String _data = new String.fromCharCodes(data).trim();
     try {
-      final parsed = json.decode(_data);
+      final parsed = json.decode(data);
       if (parsed['error'] != null) {
         print(parsed['error']);
       }
@@ -293,7 +293,7 @@ class _starting_game extends State<starting_game> {
   }
 
   // ignore: missing_return
-  Future<Null> submitGuess() {
+  Future<void> submitGuess() async {
     if (doomsdayClock > 0) {
       String strGuessTyped = ChatWindow.TextController.text.toLowerCase();
       if (strGuessTyped.length == 1) {
@@ -306,8 +306,9 @@ class _starting_game extends State<starting_game> {
               totalScore = totalScore + 2;
               print(totalScore);
               try {
-                tcpSend(updateScoreHandler, errorHandler,
-                    "updatescore/$matchId/$playerId/$totalScore");
+                var data = await tcpSendV2(
+                    errorHandler, "updatescore/$matchId/$playerId/$totalScore");
+                updateScoreHandler(data);
               } on FormatException catch (e) {
                 print("That string didn't look like Json." + e.message);
               } on NoSuchMethodError catch (e) {
@@ -340,7 +341,7 @@ class _starting_game extends State<starting_game> {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return winDialog(avatarIndex,username);
+                          return winDialog(avatarIndex, username);
                         })
                   });
             }

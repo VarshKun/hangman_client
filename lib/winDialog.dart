@@ -48,7 +48,7 @@ class _winDialog extends State<winDialog> {
                               'Winner: ' + username,
                               style: TextStyle(
                                   fontFamily: 'NunitoBold',
-                                  fontSize: 35,
+                                  fontSize: 25,
                                   color: Colors.yellow[700],
                                   shadows: <Shadow>[
                                     Shadow(

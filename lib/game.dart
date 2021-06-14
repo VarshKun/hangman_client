@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 //import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
@@ -139,11 +138,11 @@ class _Game extends State<Game> {
     }
   }
 
-  void matchStatusHandler(data) {
+  Future<void> matchStatusHandler(data) async {
     //String _data = new String.fromCharCodes(data).trim();
-    if (data is Uint8List) {
-      data = new String.fromCharCodes(data).trim();
-    }
+    // if (data is Uint8List) {
+    //   data = new String.fromCharCodes(data).trim();
+    // }
     try {
       parsedP = json.decode(data);
 
@@ -157,11 +156,13 @@ class _Game extends State<Game> {
         wordlist = tempWordList.map((word) => word as String).toList();
         // ignore: unnecessary_statements
         print('Value: $wordlist');
-        Future.delayed(const Duration(milliseconds: 1500), () {
-          if (!game.stop) {
-            tcpSend(matchStatusHandler, errorHandler, "matchstatus/$matchId");
-          }
-        });
+
+        if (!game.stop) {
+          // sleep(new Duration(milliseconds: 500));
+          await Future.delayed(Duration(seconds: 1));
+          var data = await tcpSendV2(errorHandler, "matchstatus/$matchId");
+          matchStatusHandler(data);
+        }
       } else if (parsedP['error'] != null) {
         print(parsedP['error']);
       } else {
@@ -171,6 +172,8 @@ class _Game extends State<Game> {
       print("That string didn't look like Json." + e.message);
     } on NoSuchMethodError catch (e) {
       print('That string was null!' + e.stackTrace.toString());
+    } catch (e) {
+      print("Unknown error." + e.message);
     }
   }
 
@@ -197,8 +200,8 @@ class _Game extends State<Game> {
                   if (parsedP == null || parsedP['status'] == 0) {
                     return waitingStatus();
                   } else if (parsedP['status'] == 1) {
-                    return starting_game(
-                        wordlist, pointsToWin, matchId, playerId,avatarIndex,username);
+                    return starting_game(wordlist, pointsToWin, matchId,
+                        playerId, avatarIndex, username);
                   } else {
                     return InformationDialog(
                         21313, 'dropdownValue2', 'roomCode');
