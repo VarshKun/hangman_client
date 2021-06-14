@@ -63,6 +63,8 @@ class _Game extends State<Game> {
   List<String> wordlist;
   Game game;
   int matchStatus;
+  Map<String, dynamic> playerInfo;
+  var sortedScores;
 
   dynamic get parsedP {
     return game.parsed;
@@ -157,9 +159,8 @@ class _Game extends State<Game> {
         var tempWordList = parsedP["wordlist"] as List;
         wordlist = tempWordList.map((word) => word as String).toList();
         matchStatus = parsedP['status'];
-        // ignore: unnecessary_statements
         print('Value: $wordlist');
-
+        playerInfo = parsedP['players'];
         if (!game.stop) {
           await Future.delayed(Duration(seconds: 1));
           var data = await tcpSendV2(errorHandler, "matchstatus/$matchId");
@@ -204,8 +205,9 @@ class _Game extends State<Game> {
                   } else if (parsedP['status'] == 1) {
                     return starting_game(wordlist, pointsToWin, matchId,
                         playerId, avatarIndex, username, matchStatus);
-                  } else
-                    return winDialog(avatarIndex, username);
+                  }
+                  game.stop = true;
+                  return winDialog(avatarIndex, username, playerInfo);
                 }())),
               ),
               Expanded(

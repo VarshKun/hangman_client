@@ -7,7 +7,14 @@ import 'package:lottie/lottie.dart';
 class _winDialog extends State<winDialog> {
   int avatarIndex;
   String username;
-  _winDialog(this.avatarIndex, this.username);
+  Map<String, dynamic> playerInfo;
+  var sortedScores;
+
+  _winDialog(this.avatarIndex, this.username, this.playerInfo) {
+    var playerEntries = playerInfo.values.toList();
+    sortedScores = playerEntries
+      ..sort((a, b) => b['score'].compareTo(a['score']));
+  }
   dialogContent(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -29,7 +36,7 @@ class _winDialog extends State<winDialog> {
                         strokeWidth: 3,
                         strokeColor: Colors.grey[900],
                         child: Text(
-                          'Winner: ' + username,
+                          'Winner: ' + sortedScores.elementAt(0)['name'],
                           style: TextStyle(
                               fontFamily: 'NunitoBold',
                               fontSize: 25,
@@ -50,8 +57,8 @@ class _winDialog extends State<winDialog> {
                       child: CircleAvatar(
                         backgroundColor: Colors.transparent,
                         radius: 30,
-                        child: Image.asset(
-                            AvatarIndices.imgPaths.elementAt(avatarIndex)),
+                        child: Image.asset(AvatarIndices.imgPaths.elementAt(
+                            sortedScores.elementAt(0)['avatarIndex'])),
                       ),
                     ),
                   ),
@@ -124,7 +131,28 @@ class _winDialog extends State<winDialog> {
                           Expanded(
                               flex: 2,
                               child: Container(
-                                color: Colors.cyan,
+                                color: Colors.white,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: BorderedText(
+                                    strokeWidth: 3,
+                                    strokeColor: Colors.grey[900],
+                                    child: Text(
+                                      sortedScores.elementAt(0)['name'],
+                                      style: TextStyle(
+                                          fontFamily: 'NunitoBold',
+                                          fontSize: 25,
+                                          color: Colors.yellow[700],
+                                          shadows: <Shadow>[
+                                            Shadow(
+                                                color: Colors.black,
+                                                offset: Offset(3, 2),
+                                                blurRadius: 3)
+                                          ]),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                ),
                               )),
                         ],
                       ),
@@ -143,7 +171,7 @@ class _winDialog extends State<winDialog> {
                                   strokeWidth: 3,
                                   strokeColor: Colors.grey[900],
                                   child: Text(
-                                    '2 : ',
+                                    '2 : ', //+ sortedScores.elementAt(1)['name'],
                                     style: TextStyle(
                                         fontFamily: 'NunitoBold',
                                         fontSize: 30,
@@ -164,6 +192,27 @@ class _winDialog extends State<winDialog> {
                               flex: 2,
                               child: Container(
                                 color: Colors.cyanAccent,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: BorderedText(
+                                    strokeWidth: 3,
+                                    strokeColor: Colors.grey[900],
+                                    child: Text(
+                                      sortedScores.elementAt(1)['name'],
+                                      style: TextStyle(
+                                          fontFamily: 'NunitoBold',
+                                          fontSize: 25,
+                                          color: Colors.yellow[700],
+                                          shadows: <Shadow>[
+                                            Shadow(
+                                                color: Colors.black,
+                                                offset: Offset(3, 2),
+                                                blurRadius: 3)
+                                          ]),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                ),
                               )),
                         ],
                       ),
@@ -182,7 +231,7 @@ class _winDialog extends State<winDialog> {
                                   strokeWidth: 3,
                                   strokeColor: Colors.grey[900],
                                   child: Text(
-                                    '3 : ',
+                                    '3 : ', //+ sortedScores.elementAt(3)['name'],
                                     style: TextStyle(
                                         fontFamily: 'NunitoBold',
                                         fontSize: 30,
@@ -203,6 +252,29 @@ class _winDialog extends State<winDialog> {
                               flex: 2,
                               child: Container(
                                 color: Colors.cyan,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: BorderedText(
+                                    strokeWidth: 3,
+                                    strokeColor: Colors.grey[900],
+                                    child: Text(
+                                      sortedScores.length > 2
+                                          ? sortedScores?.elementAt(2)['name']
+                                          : "",
+                                      style: TextStyle(
+                                          fontFamily: 'NunitoBold',
+                                          fontSize: 25,
+                                          color: Colors.yellow[700],
+                                          shadows: <Shadow>[
+                                            Shadow(
+                                                color: Colors.black,
+                                                offset: Offset(3, 2),
+                                                blurRadius: 3)
+                                          ]),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                ),
                               )),
                         ],
                       ),
@@ -254,8 +326,10 @@ class _winDialog extends State<winDialog> {
 class winDialog extends StatefulWidget {
   final int avatarIndex;
   final String username;
-  winDialog(this.avatarIndex, this.username);
+  final Map<String, dynamic> playerInfo;
+
+  winDialog(this.avatarIndex, this.username, this.playerInfo);
 
   @override
-  _winDialog createState() => _winDialog(avatarIndex, username);
+  _winDialog createState() => _winDialog(avatarIndex, username, playerInfo);
 }
