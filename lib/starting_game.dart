@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/services.dart';
-import 'package:hangman_multiplayer/winDialog.dart';
 import 'package:rive/rive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +29,14 @@ class starting_game extends StatefulWidget {
   final String playerId;
   final int avatarIndex;
   final String username;
+  final int matchStatus;
+
   starting_game(this.words, this.pointsToWin, this.matchId, this.playerId,
-      this.avatarIndex, this.username);
+      this.avatarIndex, this.username, this.matchStatus);
   static _starting_game currentinstance;
   @override
-  State createState() => new _starting_game(
-      words, pointsToWin, matchId, playerId, avatarIndex, username);
+  State createState() => new _starting_game(words, pointsToWin, matchId,
+      playerId, avatarIndex, username, matchStatus);
 }
 
 // ignore: camel_case_types
@@ -49,9 +50,10 @@ class _starting_game extends State<starting_game> {
   SMINumber lives;
   int avatarIndex;
   String username;
+  int matchStatus;
   bool get isPlaying => _controller.isActive ?? false;
   _starting_game(this.words, this.pointsToWin, this.matchId, this.playerId,
-      this.avatarIndex, this.username) {
+      this.avatarIndex, this.username, this.matchStatus) {
     starting_game.currentinstance = this;
     totalScore = 0;
     wonRound = false;
@@ -327,6 +329,16 @@ class _starting_game extends State<starting_game> {
             print("You guessed the word correctly.");
             totalScore = totalScore + 5;
             print(totalScore);
+            try {
+              var data = await tcpSendV2(
+                  errorHandler, "updatescore/$matchId/$playerId/$totalScore");
+              updateScoreHandler(data);
+            } on FormatException catch (e) {
+              print("That string didn't look like Json." + e.message);
+            } on NoSuchMethodError catch (e) {
+              print('That string was null!' + e.stackTrace.toString());
+            }
+
             if (totalScore < int.parse(pointsToWin)) {
               startNewWord = true;
               //Future.delayed(const Duration(seconds: 3), () {
@@ -335,16 +347,17 @@ class _starting_game extends State<starting_game> {
               wonRound = false;
               newGame();
               //});
-            } else {
-              print("You are the winner!");
-              showOverlay().then((value) => {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return winDialog(avatarIndex, username);
-                        })
-                  });
             }
+            // } else {
+            //   print("You are the winner!");
+            //   showOverlay().then((value) => {
+            //         showDialog(
+            //             context: context,
+            //             builder: (BuildContext context) {
+            //               return winDialog(avatarIndex, username);
+            //             })
+            //       });
+            // }
           }
           if (doomsdayClock <= 0) {
             print("You died.");

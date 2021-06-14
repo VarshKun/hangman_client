@@ -9,6 +9,7 @@ import 'package:hangman_multiplayer/customProgressBar.dart';
 import 'package:hangman_multiplayer/hangman_client.dart';
 import 'package:hangman_multiplayer/starting_game.dart';
 import 'package:hangman_multiplayer/waiting_status.dart';
+import 'package:hangman_multiplayer/winDialog.dart';
 //import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'avatarIndex.dart';
@@ -27,7 +28,7 @@ class Game extends StatefulWidget {
   String playerId;
   final String _username;
   //String _playerId;
-  String matchStatus;
+  //String matchStatus;
   // var parsed;
   bool stop = false;
 
@@ -61,6 +62,7 @@ class _Game extends State<Game> {
   var playerId;
   List<String> wordlist;
   Game game;
+  int matchStatus;
 
   dynamic get parsedP {
     return game.parsed;
@@ -154,11 +156,11 @@ class _Game extends State<Game> {
         _category = parsedP["category"];
         var tempWordList = parsedP["wordlist"] as List;
         wordlist = tempWordList.map((word) => word as String).toList();
+        matchStatus = parsedP['status'];
         // ignore: unnecessary_statements
         print('Value: $wordlist');
 
         if (!game.stop) {
-          // sleep(new Duration(milliseconds: 500));
           await Future.delayed(Duration(seconds: 1));
           var data = await tcpSendV2(errorHandler, "matchstatus/$matchId");
           matchStatusHandler(data);
@@ -201,11 +203,13 @@ class _Game extends State<Game> {
                     return waitingStatus();
                   } else if (parsedP['status'] == 1) {
                     return starting_game(wordlist, pointsToWin, matchId,
-                        playerId, avatarIndex, username);
-                  } else {
-                    return InformationDialog(
-                        21313, 'dropdownValue2', 'roomCode');
-                  }
+                        playerId, avatarIndex, username, matchStatus);
+                  } else {}
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) =>
+                    //             winDialog(avatarIndex, username)));
                 }())),
               ),
               Expanded(
